@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question List</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Submission Time</th>
+            <th>View Number</th>
+            <th>Vote Number</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Image</th>
+        </tr>
+        <tbody>
+            {% for row in questions %}
+            <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.submission_time }}</td>
+                <td>{{ row.view_number }}</td>
+                <td>{{ row.vote_number }}</td>
+                <td>{{ row.title }}</td>
+                <td>{{ row.message }}</td>
+                <td>{{ row.image }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+</body>
+</html>
