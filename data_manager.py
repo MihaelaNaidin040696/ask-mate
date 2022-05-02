@@ -1,14 +1,17 @@
 import connection
 
+
 def list_questions():
     questions = connection.read_questions()
     return sorted(questions, key=lambda question:question['submission_time'])
+
 
 def get_question_by_id(id):
     questions = connection.read_questions()
     for question in questions:
         if question['id'] == id:
             return question
+
 
 def get_answers_by_question_id(id):
     answers = connection.read_answers()
