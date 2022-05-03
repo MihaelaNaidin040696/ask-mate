@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect
 
 import data_manager
+import util
 
 app = Flask(__name__)
 
@@ -25,7 +26,7 @@ def add_new_question():
         return render_template("add_question.html")
     elif request.method == "POST":
         new_question = {}
-        new_question["id"] = data_manager.get_id()
+        new_question["id"] = util.get_id()
         new_question["submission_time"] = 0
         new_question["view_number"] = 0
         new_question["vote_number"] = 0
@@ -33,7 +34,7 @@ def add_new_question():
         new_question["message"] = request.form.get('message')
         new_question["image"] = ""
         data_manager.write_question(new_question)
-        return redirect(url_for('display_questions'))
+        return redirect(url_for('display_question_by_id', question_id=new_question['id']))
 
 
 if __name__ == "__main__":
