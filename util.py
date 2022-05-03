@@ -17,5 +17,3 @@ def get_now_datetime():
     dt = round(time.time())
     return dt
 
-
-

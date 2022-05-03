@@ -16,6 +16,11 @@ def display_questions():
     return render_template('list_of_questions.html', questions=sorted_questions)
 
 
+@app.template_filter('datetime')
+def convert_datetime(sec):
+    return util.get_datetime_format(sec)
+
+
 @app.route("/question/<question_id>")
 def display_question_by_id(question_id):
     question = data_manager.get_question_by_id(question_id)

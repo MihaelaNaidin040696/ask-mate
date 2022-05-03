@@ -1,8 +1,6 @@
 import csv
 import os
 
-import data_manager
-
 QUESTIONS = os.getenv('QUESTIONS') if 'QUESTIONS' in os.environ else 'question.csv'
 ANSWERS = os.getenv('ANSWERS') if 'ANSWERS' in os.environ else 'answer.csv'
 QUESTIONS_HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
@@ -39,7 +37,9 @@ def write_new_answer(answer):
         writer.writerow(answer)
 
 
-def delete_question(questions):
+def delete_question(question_to_delete):
+    questions = read_questions()
+    questions.remove(question_to_delete)
     with open(QUESTIONS, "w") as f:
         writer = csv.DictWriter(f, QUESTIONS_HEADERS)
         writer.writeheader()
@@ -47,10 +47,15 @@ def delete_question(questions):
             writer.writerow(question)
 
 
-def delete_answers(answers):
+def delete_answers_by_question_id(question_id):
+    answers = read_answers()
+    new_answers = []
+    for answer in answers:
+        if answer['question_id'] != question_id:
+            new_answers.append(answer)
     with open(ANSWERS, "w") as f:
         writer = csv.DictWriter(f, ANSWERS_HEADERS)
         writer.writeheader()
-        for answer in answers:
+        for answer in new_answers:
             writer.writerow(answer)
 
