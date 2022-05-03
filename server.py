@@ -56,5 +56,13 @@ def add_new_answer(question_id):
         return redirect(url_for('display_question_by_id', question_id=question_id))
 
 
+@app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
+def delete_questions(question_id):
+    data_manager.delete_question(question_id)
+    return redirect(url_for('display_questions'))
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -40,3 +40,21 @@ def sort_questions(questions, criteria, direction):
         return sorted(questions, key=lambda question: question[criteria])
     else:
         return sorted(questions, key=lambda question: question[criteria], reverse=True)
+
+
+def delete_question(id):
+    questions = connection.read_questions()
+    answers = connection.read_answers()
+    deleted_question = {}
+    deleted_answers = get_answers_by_question_id(id)
+    for question in questions:
+        if question['id'] == id:
+            deleted_question = question
+    questions.remove(deleted_question)
+    connection.delete_question(questions)
+    for answer in deleted_answers:
+        answers.remove(answer)
+
+    connection.delete_answers(answers)
+
+
