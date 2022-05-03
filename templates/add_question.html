@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a question</title>
+</head>
+<body>
+<form  method="POST" action="{{ url_for('add_new_question')}}">
+        <p>
+            <label for="title">Title</label><br>
+            <textarea id="id_title" rows="4" cols="40" name="title" required></textarea>
+        </p>
+        <p>
+            <label for="message">Message</label><br>
+            <textarea  id="id_message" rows="4" cols="40" name="message" required></textarea>
+        </p>
+
+        <button type="submit">Add</button>
+</form>
+</body>
+</html>
