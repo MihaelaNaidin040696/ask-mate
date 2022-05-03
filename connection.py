@@ -53,3 +53,4 @@ def delete_answers(answers):
         writer.writeheader()
         for answer in answers:
             writer.writerow(answer)
+

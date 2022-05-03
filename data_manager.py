@@ -44,17 +44,17 @@ def sort_questions(questions, criteria, direction):
 
 def delete_question(id):
     questions = connection.read_questions()
-    answers = connection.read_answers()
+    # answers = connection.read_answers()
     deleted_question = {}
-    deleted_answers = get_answers_by_question_id(id)
+    # deleted_answers = get_answers_by_question_id(id)
     for question in questions:
         if question['id'] == id:
             deleted_question = question
     questions.remove(deleted_question)
     connection.delete_question(questions)
-    for answer in deleted_answers:
-        answers.remove(answer)
-
-    connection.delete_answers(answers)
+    # for answer in deleted_answers:
+    #     answers.remove(answer)
+    #
+    # connection.delete_answers(answers)
 
 

@@ -62,7 +62,5 @@ def delete_questions(question_id):
     return redirect(url_for('display_questions'))
 
 
-
-
 if __name__ == "__main__":
     app.run(debug=True)
