@@ -20,3 +20,11 @@ def get_answers_by_question_id(id):
         if answer['question_id'] == id:
             question_answers.append(answer)
     return question_answers
+
+
+def get_id():
+    return max([int(question.get("id")) for question in list_questions()]) + 1
+
+
+def write_question(new_question):
+    connection.write_new_question(new_question)

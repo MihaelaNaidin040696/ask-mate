@@ -29,7 +29,9 @@
         {% endfor %}
         </tbody>
     </table>
-
+<form action="{{ url_for('add_new_question')}}">
+    <button type="submit">Add a question</button>
+</form>
 
 </body>
 </html>
