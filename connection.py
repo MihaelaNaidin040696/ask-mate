@@ -3,7 +3,8 @@ import os
 
 QUESTIONS = os.getenv('QUESTIONS') if 'QUESTIONS' in os.environ else 'question.csv'
 ANSWERS = os.getenv('ANSWERS') if 'ANSWERS' in os.environ else 'answer.csv'
-HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+QUESTIONS_HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+ANSWERS_HEADERS = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
 def read_questions():
@@ -26,5 +27,12 @@ def read_answers():
 
 def write_new_question(question):
     with open(QUESTIONS, "a") as f:
-        writer = csv.DictWriter(f, HEADERS)
+        writer = csv.DictWriter(f, QUESTIONS_HEADERS)
         writer.writerow(question)
+
+
+def write_new_answer(answer):
+    with open(ANSWERS, "a") as f:
+        writer = csv.DictWriter(f, ANSWERS_HEADERS)
+        writer.writerow(answer)
+
