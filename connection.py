@@ -3,7 +3,8 @@ import os
 
 QUESTIONS = os.getenv('QUESTIONS') if 'QUESTIONS' in os.environ else 'question.csv'
 ANSWERS = os.getenv('ANSWERS') if 'ANSWERS' in os.environ else 'answer.csv'
-HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+QUESTIONS_HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+ANSWERS_HEADERS = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
 def read_questions():
@@ -26,5 +27,35 @@ def read_answers():
 
 def write_new_question(question):
     with open(QUESTIONS, "a") as f:
-        writer = csv.DictWriter(f, HEADERS)
+        writer = csv.DictWriter(f, QUESTIONS_HEADERS)
         writer.writerow(question)
+
+
+def write_new_answer(answer):
+    with open(ANSWERS, "a") as f:
+        writer = csv.DictWriter(f, ANSWERS_HEADERS)
+        writer.writerow(answer)
+
+
+def delete_question(question_to_delete):
+    questions = read_questions()
+    questions.remove(question_to_delete)
+    with open(QUESTIONS, "w") as f:
+        writer = csv.DictWriter(f, QUESTIONS_HEADERS)
+        writer.writeheader()
+        for question in questions:
+            writer.writerow(question)
+
+
+def delete_answers_by_question_id(question_id):
+    answers = read_answers()
+    new_answers = []
+    for answer in answers:
+        if answer['question_id'] != question_id:
+            new_answers.append(answer)
+    with open(ANSWERS, "w") as f:
+        writer = csv.DictWriter(f, ANSWERS_HEADERS)
+        writer.writeheader()
+        for answer in new_answers:
+            writer.writerow(answer)
+
