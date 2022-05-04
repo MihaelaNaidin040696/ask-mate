@@ -51,3 +51,38 @@ def delete_answer(answer_id):
     return connection.delete_answers_by_answer_id(answer_id)
 
 
+def vote_up_question(id):
+    questions = connection.read_questions()
+    for question in questions:
+        if question['id'] == id:
+            question['vote_number'] = int(question['vote_number']) + 1
+    connection.rewrite_questions(questions)
+
+
+def vote_down_question(id):
+    questions = connection.read_questions()
+    for question in questions:
+        if question['id'] == id:
+            question['vote_number'] = int(question['vote_number']) - 1
+    connection.rewrite_questions(questions)
+
+
+def vote_up_answer(id):
+    answers = connection.read_answers()
+    for answer in answers:
+        if answer['id'] == id:
+            answer['vote_number'] = int(answer['vote_number']) + 1
+            question_id = answer['question_id']
+            connection.rewrite_answers(answers)
+            return question_id
+
+
+def vote_down_answer(id):
+    answers = connection.read_answers()
+    for answer in answers:
+        if answer['id'] == id:
+            answer['vote_number'] = int(answer['vote_number']) - 1
+            question_id = answer['question_id']
+            connection.rewrite_answers(answers)
+            return question_id
+

@@ -55,13 +55,20 @@ def rewrite_questions(question_list):
             writer.writerow(question)
 
 
+def rewrite_answers(answer_list):
+    with open(ANSWERS, "w") as f:
+        writer = csv.DictWriter(f, ANSWERS_HEADERS)
+        writer.writeheader()
+        for answer in answer_list:
+            writer.writerow(answer)
+
+
 def delete_answers_by_question_id(question_id):
     answers = read_answers()
     new_answers = []
     for answer in answers:
         if answer['question_id'] != question_id:
             new_answers.append(answer)
-
     with open(ANSWERS, "w") as f:
         writer = csv.DictWriter(f, ANSWERS_HEADERS)
         writer.writeheader()

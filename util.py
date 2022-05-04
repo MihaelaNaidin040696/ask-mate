@@ -19,7 +19,3 @@ def get_now_datetime():
     current_time = now.timestamp() * 1000
     return current_time
 
-
-def vote_up(id):
-    pass
-
