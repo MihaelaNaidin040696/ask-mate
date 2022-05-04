@@ -44,7 +44,7 @@
                 <td>{{ question.vote_number }}</td>
                 <td><a href="{{ url_for('display_question_by_id', question_id=question.id) }}">{{ question.title }}</a></td>
                 <td>{{ question.message }}</td>
-                <td>{{ question.image }}</td>
+                <td><img src="{{ url_for('static', filename='images/' + question.image) }}" style="width: 100px; height: 100px;"></td>
                 <td>
                     <form class="btn btn-primary" action="{{ url_for('vote_up_question', question_id=question.id)}}">
                         <button class="btn btn-primary" type="submit">Vote up</button>
@@ -57,7 +57,6 @@
 
             {% endfor %}
         </tbody>
-
     </table>
 <form class="btn btn-success" action="{{ url_for('add_new_question')}}">
     <button class="btn btn-success" type="submit">Add a question</button>

@@ -61,6 +61,7 @@ def delete_answers_by_question_id(question_id):
     for answer in answers:
         if answer['question_id'] != question_id:
             new_answers.append(answer)
+
     with open(ANSWERS, "w") as f:
         writer = csv.DictWriter(f, ANSWERS_HEADERS)
         writer.writeheader()

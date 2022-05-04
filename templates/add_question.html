@@ -5,7 +5,8 @@
     <title>Add a question</title>
 </head>
 <body>
-<form  method="POST" action="{{ url_for('add_new_question')}}">
+<div class="content-container">
+<form  method="POST" action="{{ url_for('add_new_question')}}" enctype="multipart/form-data">
         <p>
             <label for="title">Title</label><br>
             <textarea id="id_title" rows="4" cols="40" name="title" required></textarea>
@@ -15,7 +16,12 @@
             <textarea  id="id_message" rows="4" cols="40" name="message" required></textarea>
         </p>
 
+        <label>Upload image</label>
+        <input type="file" accept='image/*' name="image">
+        <br>
+        <br>
         <button type="submit">Add</button>
 </form>
+</div>
 </body>
 </html>

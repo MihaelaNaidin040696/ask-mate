@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, url_for, redirect
-
 import data_manager
 import util
+import os
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER') if 'UPLOAD_FOLDER' in os.environ else 'images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route("/")
@@ -33,6 +36,8 @@ def add_new_question():
     if request.method == "GET":
         return render_template("add_question.html")
     elif request.method == "POST":
+        file = request.files["image"]
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
         new_question = {}
         new_question["id"] = util.get_id()
         new_question["submission_time"] = util.get_now_datetime()
@@ -40,7 +45,7 @@ def add_new_question():
         new_question["vote_number"] = 0
         new_question["title"] = request.form.get('title')
         new_question["message"] = request.form.get('message')
-        new_question["image"] = ""
+        new_question["image"] = file.filename
         data_manager.write_question(new_question)
         return redirect(url_for('display_question_by_id', question_id=new_question['id']))
 
@@ -50,13 +55,15 @@ def add_new_answer(question_id):
     if request.method == "GET":
         return render_template("add_answer.html", question_id=question_id)
     if request.method == "POST":
+        file = request.files["image"]
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
         new_answer = {}
         new_answer['id'] = util.get_id()
         new_answer['submission_time'] = util.get_now_datetime()
         new_answer["vote_number"] = 0
         new_answer["question_id"] = question_id
         new_answer['message'] = request.form.get('message')
-        new_answer["image"] = ""
+        new_answer["image"] = file.filename
         data_manager.write_answer(new_answer)
         return redirect(url_for('display_question_by_id', question_id=question_id))
 
