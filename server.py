@@ -36,16 +36,20 @@ def add_new_question():
     if request.method == "GET":
         return render_template("add_question.html")
     elif request.method == "POST":
-        file = request.files["image"]
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
         new_question = {}
+        file = request.files["image"]
+        if file:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+            new_question["image"] = file.filename
+        else:
+            new_question["image"] = ""
         new_question["id"] = util.get_id()
         new_question["submission_time"] = util.get_now_datetime()
         new_question["view_number"] = 0
         new_question["vote_number"] = 0
         new_question["title"] = request.form.get('title')
         new_question["message"] = request.form.get('message')
-        new_question["image"] = file.filename
+
         data_manager.write_question(new_question)
         return redirect(url_for('display_question_by_id', question_id=new_question['id']))
 
