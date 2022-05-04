@@ -4,8 +4,6 @@ import util
 
 def list_questions():
     questions = connection.read_questions()
-    # for question in questions:
-    #     question['submission_time'] = util.get_datetime_format(question['submission_time'])
     return sorted(questions, key=lambda question: question['submission_time'])
 
 
@@ -48,4 +46,9 @@ def delete_question(question_id):
     question = get_question_by_id(question_id)
     connection.delete_answers_by_question_id(question_id)
     connection.delete_question(question)
+
+
+def delete_answer(answer_id):
+    return connection.delete_answers_by_answer_id(answer_id)
+
 

@@ -67,3 +67,20 @@ def delete_answers_by_question_id(question_id):
         for answer in new_answers:
             writer.writerow(answer)
 
+
+def delete_answers_by_answer_id(answer_id):
+    question_id = ""
+    answers = read_answers()
+    new_answers = []
+    for answer in answers:
+        if answer['id'] != answer_id:
+            new_answers.append(answer)
+        else:
+            question_id = answer['question_id']
+    with open(ANSWERS, "w") as f:
+        writer = csv.DictWriter(f, ANSWERS_HEADERS)
+        writer.writeheader()
+        for answer in new_answers:
+            writer.writerow(answer)
+    return question_id
+
