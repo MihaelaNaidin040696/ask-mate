@@ -1,6 +1,5 @@
 import connection
 from datetime import datetime
-import time
 
 
 def get_id():
@@ -14,11 +13,13 @@ def get_datetime_format(sec):
 
 
 def get_now_datetime():
-    # dt = round(time.time())
-    # return dt
     now = datetime.now()
     now = now.strftime("%d/%m/%Y %H:%M:%S:%fff")
     now = datetime.strptime(now, "%d/%m/%Y %H:%M:%S:%fff")
     current_time = now.timestamp() * 1000
     return current_time
+
+
+def vote_up(id):
+    pass
 

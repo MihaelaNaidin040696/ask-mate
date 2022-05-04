@@ -1,5 +1,4 @@
 import connection
-import util
 
 
 def list_questions():

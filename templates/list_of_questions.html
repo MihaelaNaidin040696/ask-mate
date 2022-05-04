@@ -36,21 +36,31 @@
             <th>Image</th>
         </tr>
         <tbody>
-            {% for row in questions %}
+            {% for question in questions %}
             <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.submission_time | datetime }}</td>
-                <td>{{ row.view_number }}</td>
-                <td>{{ row.vote_number }}</td>
-                <td><a href="{{ url_for('display_question_by_id', question_id=row.id) }}">{{ row.title }}</a></td>
-                <td>{{ row.message }}</td>
-                <td>{{ row.image }}</td>
+                <td>{{ question.id }}</td>
+                <td>{{ question.submission_time | datetime }}</td>
+                <td>{{ question.view_number }}</td>
+                <td>{{ question.vote_number }}</td>
+                <td><a href="{{ url_for('display_question_by_id', question_id=question.id) }}">{{ question.title }}</a></td>
+                <td>{{ question.message }}</td>
+                <td>{{ question.image }}</td>
+                <td>
+                    <form class="btn btn-primary" action="{{ url_for('vote_up_question', question_id=question.id)}}">
+                        <button class="btn btn-primary" type="submit">Vote up</button>
+                    </form>
+                    <form class="btn btn-danger" action="{{ url_for('vote_down_question', question_id=question.id)}}">
+                        <button class="btn btn-danger" type="submit">Vote down</button>
+                    </form>
+                </td>
             </tr>
-        {% endfor %}
+
+            {% endfor %}
         </tbody>
+
     </table>
-<form action="{{ url_for('add_new_question')}}">
-    <button type="submit">Add a question</button>
+<form class="btn btn-success" action="{{ url_for('add_new_question')}}">
+    <button class="btn btn-success" type="submit">Add a question</button>
 </form>
 
 </body>
