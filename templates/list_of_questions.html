@@ -44,7 +44,7 @@
                 <td>{{ row.vote_number }}</td>
                 <td><a href="{{ url_for('display_question_by_id', question_id=row.id) }}">{{ row.title }}</a></td>
                 <td>{{ row.message }}</td>
-                <td>{{ row.image }}</td>
+                <td><img src="{{ url_for('static', filename='images/' + row.image) }}" style="width: 100px; height: 100px;"></td>
             </tr>
         {% endfor %}
         </tbody>
