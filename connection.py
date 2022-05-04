@@ -47,6 +47,14 @@ def delete_question(question_to_delete):
             writer.writerow(question)
 
 
+def rewrite_questions(question_list):
+    with open(QUESTIONS, "w") as f:
+        writer = csv.DictWriter(f, QUESTIONS_HEADERS)
+        writer.writeheader()
+        for question in question_list:
+            writer.writerow(question)
+
+
 def delete_answers_by_question_id(question_id):
     answers = read_answers()
     new_answers = []

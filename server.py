@@ -67,5 +67,19 @@ def delete_questions(question_id):
     return redirect(url_for('display_questions'))
 
 
+@app.route('/question/<question_id>/edit', methods=["GET", "POST"])
+def edit_question(question_id):
+    questions = data_manager.list_questions()
+    entry = [question for question in questions if question['id'] == question_id][0]
+    if request.method == "POST":
+        for question in questions:
+            if question["id"] == question_id:
+                question["title"] = request.form.get('title')
+                question["message"] = request.form.get('message')
+        data_manager.rewrite_questions(questions)
+        return redirect(url_for('display_question_by_id', question_id=question_id))
+    return render_template('edit_question.html', question=entry)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

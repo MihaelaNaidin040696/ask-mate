@@ -39,7 +39,7 @@
             {% for row in questions %}
             <tr>
                 <td>{{ row.id }}</td>
-                <td>{{ row.time }}</td>
+                <td>{{ row.submission_time | datetime }}</td>
                 <td>{{ row.view_number }}</td>
                 <td>{{ row.vote_number }}</td>
                 <td><a href="{{ url_for('display_question_by_id', question_id=row.id) }}">{{ row.title }}</a></td>

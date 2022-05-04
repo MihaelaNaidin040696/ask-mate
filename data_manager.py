@@ -4,8 +4,8 @@ import util
 
 def list_questions():
     questions = connection.read_questions()
-    for question in questions:
-        question['time'] = util.get_datetime_format(question['submission_time'])
+    # for question in questions:
+    #     question['submission_time'] = util.get_datetime_format(question['submission_time'])
     return sorted(questions, key=lambda question: question['submission_time'])
 
 
@@ -27,6 +27,10 @@ def get_answers_by_question_id(id):
 
 def write_question(new_question):
     connection.write_new_question(new_question)
+
+
+def rewrite_questions(question_list):
+    connection.rewrite_questions(question_list)
 
 
 def write_answer(new_answer):
