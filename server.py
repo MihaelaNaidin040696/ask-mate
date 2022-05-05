@@ -100,22 +100,26 @@ def delete_answers(answer_id):
 
 @app.route('/question/<question_id>/vote-up')
 def vote_up_question(question_id):
-    pass
+    data_manager.vote_up_question(question_id)
+    return redirect(url_for('display_questions'))
 
 
 @app.route('/question/<question_id>/vote-down')
 def vote_down_question(question_id):
-    pass
+    data_manager.vote_down_question(question_id)
+    return redirect(url_for('display_questions'))
 
 
 @app.route('/answer/<answer_id>/vote-up')
 def vote_up_answer(answer_id):
-    pass
+    question_id = data_manager.vote_up_answer(answer_id)
+    return redirect(url_for('display_question_by_id', question_id=question_id))
 
 
 @app.route('/answer/<answer_id>/vote-down')
 def vote_down_answer(answer_id):
-    pass
+    question_id = data_manager.vote_down_answer(answer_id)
+    return redirect(url_for('display_question_by_id', question_id=question_id))
 
 
 if __name__ == "__main__":
