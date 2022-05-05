@@ -5,6 +5,7 @@ QUESTIONS = os.getenv('QUESTIONS') if 'QUESTIONS' in os.environ else 'question.c
 ANSWERS = os.getenv('ANSWERS') if 'ANSWERS' in os.environ else 'answer.csv'
 QUESTIONS_HEADERS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 ANSWERS_HEADERS = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER') if 'UPLOAD_FOLDER' in os.environ else 'images'
 
 
 def read_questions():
@@ -68,14 +69,11 @@ def delete_answers_by_question_id(question_id):
     new_answers = []
     for answer in answers:
         if answer['question_id'] == question_id:
-            path = os.path.join(os.path.dirname(__file__), 'static', 'images', answer['image'])
-            os.remove(path)
+            if answer['image']:
+                path = os.path.join(os.path.dirname(UPLOAD_FOLDER), 'images', answer['image'])
+                os.remove(path)
         if answer['question_id'] != question_id:
             new_answers.append(answer)
-        # elif answer['question_id'] == question_id:
-        #     path = os.path.join(os.path.dirname(__file__), 'static', 'images', answer['image'])
-        #     os.remove(path)
-
     with open(ANSWERS, "w") as f:
         writer = csv.DictWriter(f, ANSWERS_HEADERS)
         writer.writeheader()
@@ -91,8 +89,9 @@ def delete_answers_by_answer_id(answer_id):
         if answer['id'] != answer_id:
             new_answers.append(answer)
         else:
-            path = os.path.join(os.path.dirname(__file__), 'static', 'images', answer['image'])
-            os.remove(path)
+            if answer['image']:
+                path = os.path.join(os.path.dirname(UPLOAD_FOLDER), 'images', answer['image'])
+                os.remove(path)
             question_id = answer['question_id']
     with open(ANSWERS, "w") as f:
         writer = csv.DictWriter(f, ANSWERS_HEADERS)
