@@ -47,8 +47,8 @@ def add_new_question():
         new_question["submission_time"] = util.get_now_datetime()
         new_question["view_number"] = 0
         new_question["vote_number"] = 0
-        new_question["title"] = request.form.get('title')
-        new_question["message"] = request.form.get('message')
+        new_question["title"] = request.form.get('title').capitalize()
+        new_question["message"] = request.form.get('message').capitalize()
 
         data_manager.write_question(new_question)
         return redirect(url_for('display_question_by_id', question_id=new_question['id']))
@@ -65,7 +65,7 @@ def add_new_answer(question_id):
         new_answer['submission_time'] = util.get_now_datetime()
         new_answer["vote_number"] = 0
         new_answer["question_id"] = question_id
-        new_answer['message'] = request.form.get('message')
+        new_answer['message'] = request.form.get('message').capitalize()
         new_answer["image"] = file.filename
         if file:
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
@@ -89,8 +89,8 @@ def edit_question(question_id):
     if request.method == "POST":
         for question in questions:
             if question["id"] == question_id:
-                question["title"] = request.form.get('title')
-                question["message"] = request.form.get('message')
+                question["title"] = request.form.get('title').capitalize()
+                question["message"] = request.form.get('message').capitalize()
         data_manager.rewrite_questions(questions)
         return redirect(url_for('display_question_by_id', question_id=question_id))
     return render_template('edit_question.html', question=entry)
