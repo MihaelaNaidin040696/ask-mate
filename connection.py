@@ -67,8 +67,15 @@ def delete_answers_by_question_id(question_id):
     answers = read_answers()
     new_answers = []
     for answer in answers:
+        if answer['question_id'] == question_id:
+            path = os.path.join(os.path.dirname(__file__), 'static', 'images', answer['image'])
+            os.remove(path)
         if answer['question_id'] != question_id:
             new_answers.append(answer)
+        # elif answer['question_id'] == question_id:
+        #     path = os.path.join(os.path.dirname(__file__), 'static', 'images', answer['image'])
+        #     os.remove(path)
+
     with open(ANSWERS, "w") as f:
         writer = csv.DictWriter(f, ANSWERS_HEADERS)
         writer.writeheader()
@@ -84,6 +91,8 @@ def delete_answers_by_answer_id(answer_id):
         if answer['id'] != answer_id:
             new_answers.append(answer)
         else:
+            path = os.path.join(os.path.dirname(__file__), 'static', 'images', answer['image'])
+            os.remove(path)
             question_id = answer['question_id']
     with open(ANSWERS, "w") as f:
         writer = csv.DictWriter(f, ANSWERS_HEADERS)

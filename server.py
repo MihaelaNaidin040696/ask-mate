@@ -59,8 +59,8 @@ def add_new_answer(question_id):
     if request.method == "GET":
         return render_template("add_answer.html", question_id=question_id)
     if request.method == "POST":
-        file = request.files["image"]
         new_answer = {}
+        file = request.files["image"]
         new_answer['id'] = util.get_id()
         new_answer['submission_time'] = util.get_now_datetime()
         new_answer["vote_number"] = 0
