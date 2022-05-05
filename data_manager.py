@@ -37,6 +37,9 @@ def write_answer(new_answer):
 
 
 def sort_questions(questions, criteria, direction):
+    for question in questions:
+        question['view_number'] = int(question['view_number'])
+        question['vote_number'] = int(question['vote_number'])
     if direction == 'asc':
         return sorted(questions, key=lambda question: question[criteria])
     else:
