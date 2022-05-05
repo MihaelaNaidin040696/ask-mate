@@ -44,11 +44,7 @@
                 <td>{{ question.vote_number }}</td>
                 <td><a href="{{ url_for('display_question_by_id', question_id=question.id) }}">{{ question.title }}</a></td>
                 <td>{{ question.message }}</td>
-                {% if question.image != "" %}
-                    <td><img src="{{ url_for('static', filename='images/' + question.image) }}" style="width: 100px; height: 100px;" alt="No image found"></td>
-                {% else %}
-                    <td><img src="{{ url_for('static', filename='images/img.png') }}" style="width: 100px; height: 100px;" alt="No image found"></td>
-                {% endif %}
+                <td><img src="{{ url_for('static', filename='images/' + question.image) }}" onerror="this.style.display='none'" style="width: 100px; height: 100px;" alt="No image found"></td>
                 <td>
                     <form class="btn btn-primary" action="{{ url_for('vote_up_question', question_id=question.id)}}">
                         <button class="btn btn-primary" type="submit">Vote up</button>
