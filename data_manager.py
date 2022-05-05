@@ -10,6 +10,8 @@ def get_question_by_id(id):
     questions = connection.read_questions()
     for question in questions:
         if question['id'] == id:
+            question['view_number'] = int(question['view_number']) + 1
+            rewrite_questions(questions)
             return question
 
 
