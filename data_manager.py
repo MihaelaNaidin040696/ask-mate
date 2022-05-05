@@ -1,4 +1,7 @@
 import connection
+import os
+
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER') if 'UPLOAD_FOLDER' in os.environ else 'images'
 
 
 def list_questions():
@@ -43,6 +46,9 @@ def sort_questions(questions, criteria, direction):
 
 def delete_question(question_id):
     question = get_question_by_id(question_id)
+    if question['image']:
+        path = os.path.join(os.path.dirname(UPLOAD_FOLDER), 'images', question['image'])
+        os.remove(path)
     connection.delete_answers_by_question_id(question_id)
     connection.delete_question(question)
 

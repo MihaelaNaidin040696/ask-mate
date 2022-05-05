@@ -59,15 +59,19 @@ def add_new_answer(question_id):
     if request.method == "GET":
         return render_template("add_answer.html", question_id=question_id)
     if request.method == "POST":
-        file = request.files["image"]
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
         new_answer = {}
+        file = request.files["image"]
+        if file:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+            new_answer["image"] = file.filename
+        else:
+            new_answer["image"] = ""
+
         new_answer['id'] = util.get_id()
         new_answer['submission_time'] = util.get_now_datetime()
         new_answer["vote_number"] = 0
         new_answer["question_id"] = question_id
         new_answer['message'] = request.form.get('message')
-        new_answer["image"] = file.filename
         data_manager.write_answer(new_answer)
         return redirect(url_for('display_question_by_id', question_id=question_id))
 
