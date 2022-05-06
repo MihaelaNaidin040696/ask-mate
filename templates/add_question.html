@@ -1,27 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add a question</title>
-</head>
-<body>
-<div class="content-container">
-<form  method="POST" action="{{ url_for('add_new_question')}}" enctype="multipart/form-data">
-        <p>
-            <label for="title">Title</label><br>
-            <textarea id="id_title" rows="4" cols="40" name="title" required></textarea>
-        </p>
-        <p>
-            <label for="message">Message</label><br>
-            <textarea  id="id_message" rows="4" cols="40" name="message" required></textarea>
-        </p>
+{% extends "base.html" %} {% block title %}Add a question{% endblock title %} {%
+block content %}
+<form
+    method="POST"
+    action="{{ url_for('add_new_question') }}"
+    enctype="multipart/form-data"
+>
+    <label class="form-label" for="title">Title</label><br />
+    <textarea
+        id="id_title"
+        rows="4"
+        class="form-control"
+        cols="40"
+        name="title"
+        required
+    ></textarea>
 
-        <label>Upload image</label>
-        <input type="file" accept='image/*' name="image">
-        <br>
-        <br>
-        <button type="submit">Add</button>
+    <label class="form-label mt-3" for="message">Message</label><br />
+    <textarea
+        id="id_message"
+        class="form-control"
+        rows="4"
+        cols="40"
+        name="message"
+        required
+    ></textarea>
+
+    <label class="form-label mt-3" for="image">Upload image</label>
+    <input
+        type="file"
+        accept="image/*"
+        name="image"
+        id="image"
+        class="form-control"
+    />
+    <button class="btn btn-primary mt-3" type="submit">Add</button>
 </form>
-</div>
-</body>
-</html>
+{% endblock %}

@@ -1,73 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Question</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body style="margin-left: 20px;">
-    <br><br>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">AskMate</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{ url_for('display_questions') }}">Home</a>
-          </ul>
-        </div>
-      </div>
-    </nav><br><br>
-    <h2>QUESTION</h2>
-    <table class="table table-bordered">
-        <thead>
+{% extends "base.html" %} {% block title %}Question{% endblock title %} {% block
+content %}
+<h2>QUESTION</h2>
+<table class="table table-bordered">
+    <thead>
         <tr>
             <th scope="col">Title</th>
             <th scope="col">Message</th>
         </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ question.title }}</td>
-                <td>{{ question.message }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="d-grid gap-2 d-md-block">
-        <form class="btn btn-warning" action="{{ url_for('edit_question', question_id=question.id)}}">
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ question.title }}</td>
+            <td>{{ question.message }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-grid gap-2 d-md-block">
+    <form
+        class="d-inline"
+        action="{{ url_for('edit_question', question_id=question.id)}}"
+    >
         <button class="btn btn-warning" type="submit">Edit question</button>
-        </form>
-        <form class="btn btn-danger" action="{{ url_for('delete_questions', question_id=question.id)}}">
+    </form>
+    <form
+        class="d-inline"
+        action="{{ url_for('delete_questions', question_id=question.id)}}"
+    >
         <button class="btn btn-danger" type="submit">Delete question</button>
-        </form>
-    </div><br><br>
-    <h2>ANSWERS</h2>
-    <div class="d-grid gap-2 d-md-block">
-        <form class="btn btn-info" action="{{ url_for('add_new_answer', question_id=question.id)}}">
+    </form>
+</div>
+<br /><br />
+
+<h2>ANSWERS</h2>
+<div class="d-grid gap-2 d-md-block">
+    <form
+        class="d-inline"
+        action="{{ url_for('add_new_answer', question_id=question.id)}}"
+    >
         <button class="btn btn-info" type="submit">Post an answer</button>
-        </form>
-    </div> <br>
-    {% for answer in answers %}
-        <div class="card">
-          <div class="card-body">
-            <p class="card-link"><img src="{{ url_for('static', filename='images/' + question.image) }}" onerror="this.style.display='none'" style="width: 100px; height: 100px;" alt="No image found"></p>
-            <h5 class="card-title">{{ answer.submission_time | datetime }}</h5>
-            <p class="card-text">{{ answer.message }}</p>
-            <p class="card-link">{{ answer.vote_number }}</p>
-            <form class="btn btn-primary" action="{{ url_for('vote_up_answer', answer_id=answer.id)}}">
+    </form>
+</div>
+<br />
+{% for answer in answers %}
+<div class="card">
+    <div class="card-body">
+        {% if question.image %}
+        <p class="card-link">
+            <img
+                src="{{ url_for('static', filename='images/' + question.image) }}"
+                style="width: 100px; height: 100px"
+                alt="No image found"
+            />
+        </p>
+        {% endif %}
+        <h5 class="card-title">{{ answer.submission_time | datetime }}</h5>
+        <p class="card-text">{{ answer.message }}</p>
+        <p class="card-link">{{ answer.vote_number }}</p>
+        <div class="d-flex">
+            <form
+                class="d-inline"
+                action="{{ url_for('vote_up_answer', answer_id=answer.id)}}"
+            >
                 <button class="btn btn-primary" type="submit">Vote up</button>
             </form>
-            <form class="btn btn-danger" action="{{ url_for('vote_down_answer', answer_id=answer.id)}}">
+            <form
+                class="d-inline ml-1"
+                action="{{ url_for('vote_down_answer', answer_id=answer.id)}}"
+            >
                 <button class="btn btn-danger" type="submit">Vote down</button>
-            </form><br><br>
-            <form class="btn btn-danger" action="{{ url_for('delete_answers', answer_id=answer.id)}}">
-                <button class="btn btn-danger" type="submit">Delete answer</button>
             </form>
-          </div>
-        </div> <br>
-    {% endfor %}
-</body>
-</html>
+            <form
+                class="d-inline ml-auto"
+                action="{{ url_for('delete_answers', answer_id=answer.id)}}"
+            >
+                <button class="btn btn-danger" type="submit">
+                    Delete answer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<br />
+{% endfor %} {% endblock %}
