@@ -75,7 +75,7 @@ def rewrite_answers(answer_list):
     rewrite_file(ANSWERS, ANSWERS_HEADERS, answer_list)
 
 
-def delete_image_from_answer(image):
+def delete_image_from_file(image):
     if image:
         path = os.path.join(os.path.dirname(UPLOAD_FOLDER), "images", image)
         os.remove(path)
@@ -86,7 +86,7 @@ def delete_answers_by_question_id(question_id):
 
     for answer in read_answers():
         if answer["question_id"] == question_id:
-            delete_image_from_answer(answer.get("image"))
+            delete_image_from_file(answer.get("image"))
 
         if answer["question_id"] != question_id:
             new_answers.append(answer)
@@ -102,7 +102,7 @@ def delete_answers_by_answer_id(answer_id):
         if answer["id"] != answer_id:
             new_answers.append(answer)
         else:
-            delete_image_from_answer(answer.get("image"))
+            delete_image_from_file(answer.get("image"))
             question_id = answer["question_id"]
 
     rewrite_file(ANSWERS, ANSWERS_HEADERS, new_answers)
