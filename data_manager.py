@@ -50,10 +50,9 @@ def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
 @database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id, message, image) -> list:
     query = f"""
-        INSERT INTO answer (submission_time, vote_number, question_is, message, image)
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
         VALUES (now(), 0, {question_id}, {message}, {image})"""
     cursor.execute(query)
-    return cursor.fetchall()
 
 #
 # def delete_question(question_id):

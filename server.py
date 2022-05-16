@@ -66,7 +66,7 @@ def add_new_answer(question_id):
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
             image = file.filename
         data_manager.write_answer(question_id, request.form.get("message").capitalize(), image)
-        return redirect(url_for("display_question_by_id", question_id=question_id))
+        return redirect(url_for("display_question_by_id", question_id=id))
     return render_template("add_answer.html", question_id=question_id)
 #
 
