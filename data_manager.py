@@ -14,12 +14,11 @@ def get_questions(cursor: RealDictCursor) -> list:
 
 @database_common.connection_handler
 def get_question_by_id(cursor,id):
-    query = """
+    query=f"""
         SELECT title, message
         FROM question
-        WHERE id = id"""
-    value = {'id':id}
-    cursor.execute(query, value)
+        WHERE id = {id}"""
+    cursor.execute(query)
     return cursor.fetchone()
 
 
@@ -43,7 +42,14 @@ def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
-# def write_question(new_question):
+
+@database_common.connection_handler
+def write_question(cursor, title, message, image):
+    query = f"""
+    INSERT INTO question (submission_time,view_number, vote_number, title, message, image)
+    VALUES (now(), 0, 0, '{title}', '{message}', '{image}')"""
+    cursor.execute(query)
+
 #     connection.write_new_question(new_question)
 
 

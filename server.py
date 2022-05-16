@@ -32,6 +32,16 @@ def display_question_by_id(question_id):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_new_question():
+    if request.method == 'POST':
+        image = ""
+        file = request.files["image"]
+        if file:
+            file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+            image = file.filename
+        data_manager.write_question(request.form.get("title").capitalize(), request.form.get("message").capitalize(), image)
+        return redirect(url_for("display_question_by_id", question_id=id))
+    return render_template("add_question.html")
+
 #     if request.method == "POST":
 #         id = util.get_id()
 #         image = ""
