@@ -1,20 +1,14 @@
-import connection
-import os
-from connection import UPLOAD_FOLDER
+import database_common
 
-
-def list_questions():
-    questions = connection.read_questions()
-    return sorted(questions, key=lambda question: question["submission_time"])
-
-
-def get_question_by_id(id):
-    questions = connection.read_questions()
-    for question in questions:
-        if question["id"] == id:
-            question["view_number"] = str(int(question["view_number"]) + 1)
-            rewrite_questions(questions)
-            return question
+@database_common.connection_handler
+def get_question_by_id(cursor,id):
+    query="""
+        SELECT title, message
+        FROM question
+        WHERE id LIKE id"""
+    value = {'id':id}
+    cursor.execute(query, value)
+    return cursor.fetchone()
 
 
 def get_answers_by_question_id(id):
