@@ -1,4 +1,13 @@
+from psycopg2.extras import RealDictCursor
 import database_common
+
+
+@database_common.connection_handler
+def get_questions(cursor: RealDictCursor) -> list:
+    query = """select * from question order by submission_time"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
 
 @database_common.connection_handler
 def get_question_by_id(cursor,id):
@@ -11,11 +20,20 @@ def get_question_by_id(cursor,id):
     return cursor.fetchone()
 
 
-def get_answers_by_question_id(id):
-    return [
-        answer for answer in connection.read_answers() if answer["question_id"] == id
-    ]
+@database_common.connection_handler
+def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
+    query = """select * from answer where question_id = id"""
+    value = {"id": id}
+    cursor.execute(query, value)
+    return cursor.fetchall()
 
+
+@database_common.connection_handler
+def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
+    query = """select * from question order by criteria direction"""
+    value = {"criteria": criteria, "direction": direction}
+    cursor.execute(query, value)
+    return cursor.fetchall()
 
 def write_question(new_question):
     connection.write_new_question(new_question)
@@ -29,13 +47,6 @@ def write_answer(new_answer):
     connection.write_new_answer(new_answer)
 
 
-def sort_questions(questions, criteria, direction):
-    for question in questions:
-        question["view_number"] = int(question["view_number"])
-        question["vote_number"] = int(question["vote_number"])
-
-    condition = direction == "desc"
-    return sorted(questions, key=lambda question: question[criteria], reverse=condition)
 
 
 def delete_question(question_id):

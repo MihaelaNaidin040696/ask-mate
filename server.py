@@ -14,16 +14,10 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 @app.route("/")
 @app.route("/list")
 def display_questions():
-    questions = data_manager.list_questions()
     criteria = request.args.get("order_by", "submission_time")
     direction = request.args.get("order_direction", "desc")
-    sorted_questions = data_manager.sort_questions(questions, criteria, direction)
+    sorted_questions = data_manager.sort_questions(criteria, direction)
     return render_template("list_of_questions.html", questions=sorted_questions)
-
-
-@app.template_filter("datetime")
-def convert_datetime(sec):
-    return util.get_datetime_format(sec)
 
 
 @app.route("/question/<question_id>")
