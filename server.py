@@ -21,10 +21,8 @@ def display_questions():
 
 @app.route("/question/<question_id>")
 def display_question_by_id(question_id):
-    question_id = request.args.get('id')
-    if question_id:
-        question = data_manager.get_question_by_id(question_id)
-        answers = data_manager.get_answers_by_question_id(question_id)
+    question = data_manager.get_question_by_id(question_id)
+    answers = data_manager.get_answers_by_question_id(question_id)
     return render_template(
         "individual_question.html",
         question=question,
@@ -57,31 +55,21 @@ def add_new_question():
 #         return redirect(url_for("display_question_by_id", question_id=id))
 #     return render_template("add_question.html")
     pass
-#
+
+
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def add_new_answer(question_id):
-#     if request.method == "POST":
-#         file = request.files["image"]
+    if request.method == "POST":
+        file = request.files["image"]
+        image = ""
+        if file:
+            file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+            image = file.filename
+        data_manager.write_answer(question_id, request.form.get("message").capitalize(), image)
+        return redirect(url_for("display_question_by_id", question_id=question_id))
+    return render_template("add_answer.html", question_id=question_id)
 #
-#         image = ""
-#         if file:
-#             file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
-#             image = file.filename
-#
-#         data_manager.write_answer(
-#             {
-#                 "id": util.get_id(),
-#                 "submission_time": util.get_now_datetime(),
-#                 "vote_number": 0,
-#                 "question_id": question_id,
-#                 "message": request.form.get("message").capitalize(),
-#                 "image": image,
-#             }
-#         )
-#         return redirect(url_for("display_question_by_id", question_id=question_id))
-#     return render_template("add_answer.html", question_id=question_id)
-    pass
-#
+
 @app.route("/question/<question_id>/delete")
 def delete_questions(question_id):
 #     data_manager.delete_question(question_id)

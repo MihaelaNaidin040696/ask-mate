@@ -4,17 +4,20 @@ import database_common
 
 @database_common.connection_handler
 def get_questions(cursor: RealDictCursor) -> list:
-    query = """select * from question order by submission_time"""
+    query = """
+        SELECT * 
+        FROM question 
+        ORDER BY submission_time"""
     cursor.execute(query)
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_question_by_id(cursor,id):
-    query="""
+    query = """
         SELECT title, message
         FROM question
-        WHERE id LIKE id"""
+        WHERE id = id"""
     value = {'id':id}
     cursor.execute(query, value)
     return cursor.fetchone()
@@ -22,7 +25,10 @@ def get_question_by_id(cursor,id):
 
 @database_common.connection_handler
 def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
-    query = """select * from answer where question_id = id"""
+    query = """
+        SELECT * 
+        FROM answer 
+        WHERE question_id = id"""
     value = {"id": id}
     cursor.execute(query, value)
     return cursor.fetchall()
@@ -30,24 +36,25 @@ def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
 
 @database_common.connection_handler
 def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
-    query =  f"""select * from question order by {criteria} {direction}"""
-    # value = {"criteria": criteria, "direction": direction}
+    query = f"""
+        SELECT * 
+        FROM question 
+        ORDER BY {criteria} {direction}"""
     cursor.execute(query)
     return cursor.fetchall()
 
 # def write_question(new_question):
 #     connection.write_new_question(new_question)
-#
-#
-# def rewrite_questions(question_list):
-#     connection.rewrite_questions(question_list)
-#
-#
-# def write_answer(new_answer):
-#     connection.write_new_answer(new_answer)
-#
-#
-#
+
+
+@database_common.connection_handler
+def write_answer(cursor: RealDictCursor, question_id, message, image) -> list:
+    query = f"""
+        INSERT INTO answer (submission_time, vote_number, question_is, message, image)
+        VALUES (now(), 0, {question_id}, {message}, {image})"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
 #
 # def delete_question(question_id):
 #     question = get_question_by_id(question_id)
