@@ -1,5 +1,4 @@
 from psycopg2.extras import RealDictCursor
-
 import database_common
 
 
@@ -11,9 +10,28 @@ def get_questions(cursor: RealDictCursor) -> list:
 
 
 @database_common.connection_handler
+def get_question_by_id(cursor,id):
+    query="""
+        SELECT title, message
+        FROM question
+        WHERE id LIKE id"""
+    value = {'id':id}
+    cursor.execute(query, value)
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
 def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
     query = """select * from answer where question_id = id"""
     value = {"id": id}
+    cursor.execute(query, value)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
+    query = """select * from question order by criteria direction"""
+    value = {"criteria": criteria, "direction": direction}
     cursor.execute(query, value)
     return cursor.fetchall()
 
@@ -30,12 +48,6 @@ def write_answer(new_answer):
     connection.write_new_answer(new_answer)
 
 
-@database_common.connection_handler
-def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
-    query = """select * from question order by criteria direction"""
-    value = {"criteria": criteria, "direction": direction}
-    cursor.execute(query, value)
-    return cursor.fetchall()
 
 
 def delete_question(question_id):
