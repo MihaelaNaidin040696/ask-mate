@@ -21,10 +21,8 @@ def display_questions():
 
 @app.route("/question/<question_id>")
 def display_question_by_id(question_id):
-    question_id = request.args.get('id')
-    if question_id:
-        question = data_manager.get_question_by_id(question_id)
-        answers = data_manager.get_answers_by_question_id(question_id)
+    question = data_manager.get_question_by_id(question_id)
+    answers = data_manager.get_answers_by_question_id(question_id)
     return render_template(
         "individual_question.html",
         question=question,
@@ -34,6 +32,16 @@ def display_question_by_id(question_id):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_new_question():
+    if request.method == 'POST':
+        image = ""
+        file = request.files["image"]
+        if file:
+            file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+            image = file.filename
+        data_manager.write_question(request.form.get("title").capitalize(), request.form.get("message").capitalize(), image)
+        return redirect(url_for("display_question_by_id", question_id=id))
+    return render_template("add_question.html")
+
 #     if request.method == "POST":
 #         id = util.get_id()
 #         image = ""
