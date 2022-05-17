@@ -4,32 +4,36 @@ import database_common
 
 @database_common.connection_handler
 def get_questions(cursor: RealDictCursor) -> list:
-    query = """
+    cursor.execute(
+        """
         SELECT * 
         FROM question 
         ORDER BY submission_time"""
-    cursor.execute(query)
+    )
     return cursor.fetchall()
 
 
 @database_common.connection_handler
-def get_question_by_id(cursor,id):
-    query=f"""
+def get_question_by_id(cursor: RealDictCursor, id) -> list:
+    cursor.execute(
+        """
         SELECT title, message
         FROM question
-        WHERE id = {id}"""
-    cursor.execute(query)
+        WHERE id = %(id)s;""",
+        {"id": id},
+    )
     return cursor.fetchone()
 
 
 @database_common.connection_handler
 def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
-    query = """
+    cursor.execute(
+        """
         SELECT * 
         FROM answer 
-        WHERE question_id = id"""
-    value = {"id": id}
-    cursor.execute(query, value)
+        WHERE question_id = %(id)s;""",
+        {"id": id},
+    )
     return cursor.fetchall()
 
 
@@ -45,22 +49,38 @@ def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
 
 @database_common.connection_handler
 def write_question(cursor, title, message, image):
-    query = f"""
+    cursor.execute(
+        """
     INSERT INTO question (submission_time,view_number, vote_number, title, message, image)
-    VALUES (now(), 0, 0, '{title}', '{message}', '{image}')"""
-    cursor.execute(query)
-
-#     connection.write_new_question(new_question)
+    VALUES (now()::timestamp(0), 0, 0, %(title)s, %(message)s, %(image)s);""",
+        {"title": title, "message": message, "image": image},
+    )
 
 
 @database_common.connection_handler
-def write_answer(cursor: RealDictCursor, question_id, message, image) -> list:
-    query = f"""
+def write_answer(cursor: RealDictCursor, question_id, message, image):
+    cursor.execute(
+        """
         INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-        VALUES (now(), 0, {question_id}, {message}, {image})"""
-    cursor.execute(query)
+        VALUES (now()::timestamp(0), 0, %(question_id)s, %(message)s, %(image)s);""",
+        {"question_id": question_id, "message": message, "image": image},
+    )
 
-#
+
+@database_common.connection_handler
+def delete_question(cursor: RealDictCursor, id):
+    print(
+        cursor.execute(
+            """
+            DELETE FROM comment WHERE question_id = %(id)s;
+            DELETE FROM answer WHERE question_id = %(id)s;
+            DELETE FROM question_tag WHERE question_id = %(id)s;
+            DELETE FROM question WHERE id = %(id)s;""",
+            {"id": id},
+        )
+    )
+
+
 # def delete_question(question_id):
 #     question = get_question_by_id(question_id)
 #     connection.delete_image_from_file(question["image"])
