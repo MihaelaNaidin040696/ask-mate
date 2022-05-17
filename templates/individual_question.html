@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Question{% endblock title %} {% block
 content %}
 <h2>QUESTION</h2>
+<h1>{{question_id}}</h1>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -19,16 +20,17 @@ content %}
 <div class="d-grid gap-2 d-md-block">
     <form
         class="d-inline"
-        action="{{ url_for('edit_question', question_id=question.id)}}"
+        {#actionaction="{{ url_for('edit_question', question_id=question.id)}}"#}
     >
         <button class="btn btn-warning" type="submit">Edit question</button>
     </form>
-    <form
+        <form
         class="d-inline"
-        action="{{ url_for('delete_questions', question_id=question.id)}}"
-    >
+        action="{{ url_for('delete_questions', question_id=question_id)}}"
+        method="GET"
+        >
         <button class="btn btn-danger" type="submit">Delete question</button>
-    </form>
+        </form>
 </div>
 <br /><br />
 
@@ -41,45 +43,5 @@ content %}
         <button class="btn btn-info" type="submit">Post an answer</button>
     </form>
 </div>
-<br />
-{% for answer in answers %}
-<div class="card">
-    <div class="card-body">
-        {% if question.image %}
-        <p class="card-link">
-            <img
-                src="{{ url_for('static', filename='images/' + question.image) }}"
-                style="width: 100px; height: 100px"
-                alt="No image found"
-            />
-        </p>
-        {% endif %}
-        <h5 class="card-title">{{ answer.submission_time }}</h5>
-        <p class="card-text">{{ answer.message }}</p>
-        <p class="card-link">{{ answer.vote_number }}</p>
-        <div class="d-flex">
-            <form
-                class="d-inline"
-                action="{{ url_for('vote_up_answer', answer_id=answer.id)}}"
-            >
-                <button class="btn btn-primary" type="submit">Vote up</button>
-            </form>
-            <form
-                class="d-inline ml-1"
-                action="{{ url_for('vote_down_answer', answer_id=answer.id)}}"
-            >
-                <button class="btn btn-danger" type="submit">Vote down</button>
-            </form>
-            <form
-                class="d-inline ml-auto"
-                action="{{ url_for('delete_answers', answer_id=answer.id)}}"
-            >
-                <button class="btn btn-danger" type="submit">
-                    Delete answer
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-<br />
-{% endfor %} {% endblock %}
+
+{% endblock %}
