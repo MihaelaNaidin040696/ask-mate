@@ -75,9 +75,11 @@ def delete_questions(question_id):
 
 @app.route("/answer/<answer_id>/delete", methods=["GET", "POST"])
 def delete_answers(answer_id):
+    print(answer_id)
     data_manager.delete_answer(answer_id)
-    return redirect(url_for("display_question_by_id", question_id=id))
-
+    print(id)
+    # return redirect(url_for("display_question_by_id", question_id=id))
+    return "ceva"
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):
