@@ -72,7 +72,8 @@ content %}
             </form>
             <form
                 class="d-inline ml-auto"
-                action="{{ url_for('delete_answers', answer_id=answer.id)}}"
+                action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
+                method="post"
             >
                 <button class="btn btn-danger" type="submit">
                     Delete answer

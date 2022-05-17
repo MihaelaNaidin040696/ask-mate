@@ -93,16 +93,17 @@ def delete_question(cursor: RealDictCursor, id):
     )
 
 
+@database_common.connection_handler
 def delete_answer(cursor: RealDictCursor, id):
     print(
         cursor.execute(
             """
             DELETE FROM comment WHERE answer_id = %(id)s;
-            DELETE FROM answer WHERE answer_id = %(id)s;"""
+            DELETE FROM answer WHERE id = %(id)s;""",
+            {"id": id},
         )
     )
 
-    return cursor.fetchone()
 
 @database_common.connection_handler
 def edit_question(cursor: RealDictCursor, id, title, message):
@@ -163,3 +164,4 @@ def get_id_question_by_id_answer(cursor, answer_id):
         {"answer_id": answer_id},
     )
     return cursor.fetchone()
+

@@ -75,11 +75,10 @@ def delete_questions(question_id):
 
 @app.route("/answer/<answer_id>/delete", methods=["GET", "POST"])
 def delete_answers(answer_id):
-    print(answer_id)
+    question_id = data_manager.get_answers_by_answer_id(answer_id)['question_id']
     data_manager.delete_answer(answer_id)
-    print(id)
-    # return redirect(url_for("display_question_by_id", question_id=id))
-    return "ceva"
+    return redirect(url_for("display_question_by_id", answer_id=answer_id, question_id=question_id))
+
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):
@@ -121,4 +120,5 @@ def vote_down_answer(answer_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,
+            port=5001)
