@@ -23,8 +23,6 @@ def display_questions():
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def display_question_by_id(question_id):
     if request.method == "POST":
-        print(15)
-        print(question_id)
         return redirect("{{ url_for('display_question_by_id', question_id=question_id) }}")
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
@@ -121,5 +119,4 @@ def vote_down_answer(answer_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True,
-            port=5000)
+    app.run(debug=True)

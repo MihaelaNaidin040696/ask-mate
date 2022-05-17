@@ -2,7 +2,6 @@ from psycopg2.extras import RealDictCursor
 import database_common
 
 
-
 @database_common.connection_handler
 def get_headers(cursor: RealDictCursor) -> list:
     cursor.execute(
@@ -12,6 +11,7 @@ def get_headers(cursor: RealDictCursor) -> list:
         ORDER BY submission_time"""
     )
     return cursor.fetchone()
+
 
 @database_common.connection_handler
 def get_questions(cursor: RealDictCursor) -> list:
