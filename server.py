@@ -19,15 +19,20 @@ def display_questions():
     return render_template("list_of_questions.html", questions=sorted_questions)
 
 
-@app.route("/question/<question_id>")
+@app.route("/question/<question_id>", methods=["GET", "POST"])
 def display_question_by_id(question_id):
+    if request.method == "POST":
+        print(15)
+        print(question_id)
+        return redirect("{{ url_for('display_question_by_id', question_id=question_id) }}")
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     return render_template(
         "individual_question.html",
         question=question,
         answers=answers,
-        question_id=question_id,)
+        question_id=question_id,
+    )
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -64,63 +69,54 @@ def add_new_answer(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
 def delete_questions(question_id):
-    questions = data_manager.get_questions()
-    for question in questions:
-        if int(question_id) == question["id"]:
-            data_manager.delete_question(question_id)
+    data_manager.delete_question(question_id)
     return redirect(url_for("display_questions", question_id=question_id))
+
+
+@app.route("/answer/<answer_id>/delete", methods=["GET", "POST"])
+def delete_answers(answer_id):
+    data_manager.delete_answer(answer_id)
+    return redirect(url_for("display_question_by_id", question_id=id))
 
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):
     question = data_manager.get_question_by_id(question_id)
-    if request.method=="POST":
-        question["title"] = request.form.get("title")
-        question["message"] = request.form.get("message")
-        data_manager.edit_question(question_id, question["title"], question["message"])
+    if request.method == "POST":
+        title = request.form.get("title")
+        message = request.form.get("message")
+        data_manager.edit_question(question_id, title, message)
         return redirect(url_for("display_question_by_id", question_id=question_id))
-    return render_template("edit_question.html", question=question,question_id=question_id)
+    return render_template("edit_question.html", question=question, question_id=question_id)
 
 
-@app.route("/answer/<answer_id>/delete")
-def delete_answers(answer_id):
-    #     question_id = data_manager.delete_answer(answer_id)
-    #     return redirect(url_for("display_question_by_id", question_id=question_id))
-    pass
-
-
-#
 @app.route("/question/<question_id>/vote-up")
 def vote_up_question(question_id):
-    #     data_manager.vote_up_question(question_id)
-    #     return redirect(url_for("display_questions"))
-    pass
+    data_manager.vote_up_question(question_id)
+    return redirect(url_for("display_questions"))
 
 
-#
 @app.route("/question/<question_id>/vote-down")
 def vote_down_question(question_id):
-    #     data_manager.vote_down_question(question_id)
-    #     return redirect(url_for("display_questions"))
-    pass
+    data_manager.vote_down_question(question_id)
+    return redirect(url_for("display_questions"))
 
 
-#
 @app.route("/answer/<answer_id>/vote-up")
 def vote_up_answer(answer_id):
-    #     question_id = data_manager.vote_up_answer(answer_id)
-    #     return redirect(url_for("display_question_by_id", question_id=question_id))
-    pass
+    answer_id=int(answer_id)
+    data_manager.vote_up_answer(answer_id)
+    return redirect(url_for("display_question_by_id",
+                            question_id=dict(data_manager.get_answers_by_answer_id(answer_id))['question_id']))
 
 
-#
 @app.route("/answer/<answer_id>/vote-down")
 def vote_down_answer(answer_id):
-    #     question_id = data_manager.vote_down_answer(answer_id)
-    #     return redirect(url_for("display_question_by_id", question_id=question_id))
-    pass
+    answer_id = int(answer_id)
+    data_manager.vote_down_answer(answer_id)
+    return redirect(url_for("display_question_by_id",
+                            question_id=dict(data_manager.get_answers_by_answer_id(answer_id))['question_id']))
 
 
-#
 if __name__ == "__main__":
     app.run(debug=True)

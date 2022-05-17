@@ -18,13 +18,14 @@ content %}
 </table>
 
 <div class="d-grid gap-2 d-md-block">
+
     <form
         class="d-inline"
         action="{{ url_for('edit_question', question_id=question_id)}}"
-
     >
         <button class="btn btn-warning" type="submit">Edit question</button>
     </form>
+
         <form
         class="d-inline"
         action="{{ url_for('delete_questions', question_id=question_id)}}"
@@ -59,19 +60,19 @@ content %}
         <div class="d-flex">
             <form
                 class="d-inline"
-                action="{{ url_for('vote_up_answer', answer_id=answer_id)}}"
+                action="{{ url_for('vote_up_answer', answer_id=answer.id, question_id=question_id)}}"
             >
                 <button class="btn btn-primary" type="submit">Vote up</button>
             </form>
             <form
                 class="d-inline ml-1"
-                action="{{ url_for('vote_down_answer', answer_id=answer_id)}}"
+                action="{{ url_for('vote_down_answer', answer_id=answer.id)}}"
             >
                 <button class="btn btn-danger" type="submit">Vote down</button>
             </form>
             <form
                 class="d-inline ml-auto"
-                action="{{ url_for('delete_answers', answer_id=answer_id)}}"
+                action="{{ url_for('delete_answers', answer_id=answer.id)}}"
             >
                 <button class="btn btn-danger" type="submit">
                     Delete answer
