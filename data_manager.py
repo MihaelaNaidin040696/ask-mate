@@ -197,6 +197,7 @@ def add_answer_comment(cursor: RealDictCursor, id, message):
         {'id': id, 'message': message}
     )
 
+
 def get_id_question_by_id_answer(cursor, answer_id):
     cursor.execute(
         """
