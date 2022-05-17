@@ -66,7 +66,6 @@ def delete_question(cursor, id):
     """
     value = {"id": id}
     cursor.execute(query, value)
-    # print(cursor.query.decode("utf-8"))
     print(cursor.execute(query, value))
 
 #
