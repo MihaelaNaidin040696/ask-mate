@@ -141,3 +141,48 @@ def vote_down_answer(cursor: RealDictCursor, id):
         WHERE id = %(id)s;""",
         {"id": id},
     )
+
+
+@database_common.connection_handler
+def get_question_comments(cursor: RealDictCursor, id) -> list:
+    cursor.execute(
+        """
+        SELECT message, submission_time
+        FROM comment
+        WHERE question_id = %(id)s;""",
+        {"id": id},
+    )
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_answer_comments(cursor: RealDictCursor, id) -> list:
+    cursor.execute(
+        """
+        SELECT message, submission_time
+        FROM comment
+        WHERE answer_id = %(id)s;""",
+        {"id": id},
+    )
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def add_question_comment(cursor: RealDictCursor, id, message):
+    cursor.execute(
+        """
+        INSERT INTO comment (question_id, message, submission_time, edited_count)
+        VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);""",
+        {'id': id, 'message': message}
+    )
+
+
+@database_common.connection_handler
+def add_answer_comment(cursor: RealDictCursor, id, message):
+    cursor.execute(
+        """
+        INSERT INTO comment (answer_id, message, submission_time, edited_count)
+        VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);""",
+        {'id': id, 'message': message}
+    )
+
