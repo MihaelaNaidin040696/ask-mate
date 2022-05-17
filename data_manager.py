@@ -38,6 +38,18 @@ def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
 
 
 @database_common.connection_handler
+def get_answers_by_answer_id(cursor: RealDictCursor, id) -> list:
+    cursor.execute(
+        f"""
+        SELECT * 
+        FROM answer 
+        WHERE id = {id};"""
+
+    )
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
 def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
     query = f"""
         SELECT * 
@@ -81,7 +93,6 @@ def delete_question(cursor: RealDictCursor, id):
     )
 
 
-@database_common.connection_handler
 def delete_answer(cursor: RealDictCursor, id):
     print(
         cursor.execute(
@@ -128,10 +139,10 @@ def vote_up_answer(cursor: RealDictCursor, id):
     cursor.execute(
         """
         UPDATE answer SET vote_number = vote_number + 1
-        WHERE id = %(id)s;""",
+        WHERE id = %(id)s ;""",
         {"id": id},
-    )
 
+    )
 
 @database_common.connection_handler
 def vote_down_answer(cursor: RealDictCursor, id):
@@ -186,3 +197,11 @@ def add_answer_comment(cursor: RealDictCursor, id, message):
         {'id': id, 'message': message}
     )
 
+def get_id_question_by_id_answer(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT question_id FROM answer
+        WHERE question_id = %(answer_id)s;""",
+        {"answer_id": answer_id},
+    )
+    return cursor.fetchone()
