@@ -15,8 +15,9 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def display_questions():
     criteria = request.args.get("order_by", "submission_time")
     direction = request.args.get("order_direction", "desc")
+    headers=data_manager.get_headers()
     sorted_questions = data_manager.sort_questions(criteria, direction)
-    return render_template("list_of_questions.html", questions=sorted_questions)
+    return render_template("list_of_questions.html", questions=sorted_questions, headers=headers)
 
 
 @app.route("/question/<question_id>", methods=["GET", "POST"])
@@ -121,4 +122,4 @@ def vote_down_answer(answer_id):
 
 if __name__ == "__main__":
     app.run(debug=True,
-            port=5001)
+            port=5000)
