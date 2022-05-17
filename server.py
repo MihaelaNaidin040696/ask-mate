@@ -65,52 +65,50 @@ def add_new_answer(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
 def delete_questions(question_id):
-    questions = data_manager.get_questions()
-    for question in questions:
-        if int(question_id) == question["id"]:
-            data_manager.delete_question(question_id)
+    data_manager.delete_question(question_id)
     return redirect(url_for("display_questions", question_id=question_id))
 
 
-@app.route("/answer/<answer_id>/delete")
+@app.route("/answer/<answer_id>/delete", methods=["GET", "POST"])
 def delete_answers(answer_id):
-    #     question_id = data_manager.delete_answer(answer_id)
-    #     return redirect(url_for("display_question_by_id", question_id=question_id))
-    pass
+    data_manager.delete_answer(answer_id)
+    return redirect(url_for("display_question_by_id", question_id=id))
 
 
-#
+@app.route("/question/<question_id>/edit", methods=["GET", "POST"])
+def edit_question(question_id):
+    question = data_manager.get_question_by_id(question_id)
+    if request.method == "POST":
+        title = request.form.get("title")
+        message = request.form.get("message")
+        data_manager.edit_question(question_id, title, message)
+        return redirect(url_for("display_question_by_id", question_id=question_id))
+    return render_template("edit_question.html", question=question)
+
+
 @app.route("/question/<question_id>/vote-up")
 def vote_up_question(question_id):
-    #     data_manager.vote_up_question(question_id)
-    #     return redirect(url_for("display_questions"))
-    pass
+    data_manager.vote_up_question(question_id)
+    return redirect(url_for("display_questions"))
 
 
-#
 @app.route("/question/<question_id>/vote-down")
 def vote_down_question(question_id):
-    #     data_manager.vote_down_question(question_id)
-    #     return redirect(url_for("display_questions"))
-    pass
+    data_manager.vote_down_question(question_id)
+    return redirect(url_for("display_questions"))
 
 
-#
 @app.route("/answer/<answer_id>/vote-up")
 def vote_up_answer(answer_id):
-    #     question_id = data_manager.vote_up_answer(answer_id)
-    #     return redirect(url_for("display_question_by_id", question_id=question_id))
-    pass
+    data_manager.vote_up_answer(answer_id)
+    return redirect(url_for("display_question_by_id", question_id=id))
 
 
-#
 @app.route("/answer/<answer_id>/vote-down")
 def vote_down_answer(answer_id):
-    #     question_id = data_manager.vote_down_answer(answer_id)
-    #     return redirect(url_for("display_question_by_id", question_id=question_id))
-    pass
+    data_manager.vote_down_answer(answer_id)
+    return redirect(url_for("display_question_by_id", question_id=id))
 
 
-#
 if __name__ == "__main__":
     app.run(debug=True)
