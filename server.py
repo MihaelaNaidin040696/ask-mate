@@ -83,7 +83,7 @@ def edit_question(question_id):
         message = request.form.get("message")
         data_manager.edit_question(question_id, title, message)
         return redirect(url_for("display_question_by_id", question_id=question_id))
-    return render_template("edit_question.html", question=question)
+    return render_template("edit_question.html", question=question, question_id=question_id)
 
 
 @app.route("/question/<question_id>/vote-up")
