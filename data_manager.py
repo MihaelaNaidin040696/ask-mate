@@ -61,6 +61,18 @@ def get_answers_by_answer_id(cursor: RealDictCursor, id:int) -> list:
 
 
 @database_common.connection_handler
+def get_comments_by_comment_id(cursor: RealDictCursor, id:int) -> list:
+    cursor.execute(
+        f"""
+        SELECT * 
+        FROM comment 
+        WHERE id = {id};"""
+
+    )
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
 def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
     query = f"""
         SELECT * 
@@ -229,4 +241,30 @@ def edit_answer(cursor: RealDictCursor, id, message):
         WHERE id = %(id)s;""",
         {"id": id, "message": message},
     )
+
+
+@database_common.connection_handler
+def edit_comment(cursor: RealDictCursor, id, message):
+    cursor.execute(
+        """
+        UPDATE comment 
+        SET message = %(message)s, 
+            submission_time = now()::timestamp(0),
+            edited_count = edited_count + 1
+        WHERE id = %(id)s;""",
+        {"id": id, "message": message},
+    )
+
+
+@database_common.connection_handler
+def delete_comment(cursor: RealDictCursor, id):
+    cursor.execute(
+        """
+        DELETE FROM comment 
+        WHERE question_id = %(id)s 
+        OR answer_id = %(id)s;""",
+        {"id": id},
+    )
+    question_id = cursor.fetchone()('question_id')
+    return question_id
 

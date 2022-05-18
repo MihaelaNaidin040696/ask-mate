@@ -228,14 +228,34 @@ def edit_answer(answer_id):
     )
 
 
-@app.route("/comment/<comment_id>/edit")
-def edit_comment():
-    pass
+@app.route("/comment/<comment_id>/edit", methods=["GET", "POST"])
+def edit_comment(comment_id):
+    comment = data_manager.get_comments_by_comment_id(comment_id)
+    if request.method == "POST":
+        message = request.form.get("message")
+        data_manager.edit_comment(comment_id, message)
+        return redirect(
+            url_for(
+                "display_question_by_id",
+                question_id=dict(data_manager.get_answers_by_answer_id(comment_id))[
+                    "question_id"
+                ],
+            )
+        )
+    return render_template(
+        "edit_comment.html",
+        comment=comment,
+        comment_id=comment_id,
+    )
 
 
 @app.route("/comments/<comment_id>/delete")
-def delete_comment():
-    pass
+def delete_comment(comment_id):
+    data_manager.delete_comment(comment_id)
+    return redirect(
+        url_for(
+            "display_question_by_id",
+            question_id=data_manager.get_answers_by_answer_id(comment_id)["question_id"]))
 
 
 @app.route("/question/<question_id>/new-tag")
