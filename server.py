@@ -58,7 +58,7 @@ def add_new_question():
         return redirect(
             url_for(
                 "display_question_by_id",
-                question_id=id,
+                question_id=request.args.get("question_id"),
             )
         )
     return render_template("add_question.html")
@@ -216,7 +216,9 @@ def edit_answer(answer_id):
         return redirect(
             url_for(
                 "display_question_by_id",
-                question_id=id,
+                question_id=dict(data_manager.get_answers_by_answer_id(answer_id))[
+                    "question_id"
+                ],
             )
         )
     return render_template(

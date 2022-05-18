@@ -49,7 +49,7 @@ def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
 
 
 @database_common.connection_handler
-def get_answers_by_answer_id(cursor: RealDictCursor, id) -> list:
+def get_answers_by_answer_id(cursor: RealDictCursor, id:int) -> list:
     cursor.execute(
         f"""
         SELECT * 
