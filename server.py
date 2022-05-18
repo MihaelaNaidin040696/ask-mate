@@ -258,22 +258,15 @@ def add_question_tag(question_id):
         "add_tag.html", question_id=question_id, tags=data_manager.get_tags()
     )
 
-    # tags = data_manager.get_tags()
-    # list_of_tags = []
-    # tag_id = 1
-    # if request.method == 'POST':
-    #     for tag in tags:
-    #         list_of_tags.append(dict(tag)['name'])
-    #         if dict(tag)['name'] == request.form.get('name'):
-    #             tag_id = dict(tag)['id']
-    #     data_manager.add_question_tag(question_id, tag_id)
-    #     if request.form.get('name') not in list_of_tags:
-    #         data_manager.add_new_tag(request.form.get('name'))
-
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
-def delete_question_tag():
-    pass
+def delete_question_tag(question_id, tag_id):
+    data_manager.delete_tag(question_id, tag_id)
+    return redirect(
+        url_for(
+            "display_question_by_id",
+            question_id=question_id,
+        ))
 
 
 if __name__ == "__main__":
