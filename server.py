@@ -36,6 +36,8 @@ def display_question_by_id(question_id):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_new_question():
+    question_id= request.args.get("question_id")
+    print(question_id)
     if request.method == "POST":
         image = ""
         file = request.files["image"]
@@ -47,7 +49,7 @@ def add_new_question():
             request.form.get("message").capitalize(),
             image,
         )
-        return redirect(url_for("display_question_by_id", question_id=id))
+        return redirect(url_for("display_question_by_id", question_id=question_id))
     return render_template("add_question.html")
 
 
