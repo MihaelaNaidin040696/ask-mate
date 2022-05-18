@@ -15,15 +15,21 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def display_questions():
     criteria = request.args.get("order_by", "submission_time")
     direction = request.args.get("order_direction", "desc")
-    headers=data_manager.get_headers()
+    headers = data_manager.get_headers()
     sorted_questions = data_manager.sort_questions(criteria, direction)
-    return render_template("list_of_questions.html", questions=sorted_questions, headers=headers)
+    return render_template(
+        "list_of_questions.html",
+        questions=sorted_questions,
+        headers=headers,
+    )
 
 
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def display_question_by_id(question_id):
     if request.method == "POST":
-        return redirect("{{ url_for('display_question_by_id', question_id=question_id) }}")
+        return redirect(
+            "{{ url_for('display_question_by_id', question_id=question_id) }}"
+        )
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     question_comment = data_manager.get_question_comments(question_id)
@@ -94,9 +100,15 @@ def delete_questions(question_id):
 
 @app.route("/answer/<answer_id>/delete", methods=["GET", "POST"])
 def delete_answers(answer_id):
-    question_id = data_manager.get_answers_by_answer_id(answer_id)['question_id']
+    question_id = data_manager.get_answers_by_answer_id(answer_id)["question_id"]
     data_manager.delete_answer(answer_id)
-    return redirect(url_for("display_question_by_id", answer_id=answer_id, question_id=question_id))
+    return redirect(
+        url_for(
+            "display_question_by_id",
+            answer_id=answer_id,
+            question_id=question_id,
+        )
+    )
 
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
