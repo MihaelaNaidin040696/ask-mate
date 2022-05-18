@@ -144,6 +144,7 @@ def vote_up_answer(cursor: RealDictCursor, id):
 
     )
 
+
 @database_common.connection_handler
 def vote_down_answer(cursor: RealDictCursor, id):
     cursor.execute(
@@ -206,3 +207,14 @@ def get_id_question_by_id_answer(cursor, answer_id):
         {"answer_id": answer_id},
     )
     return cursor.fetchone()
+
+
+@database_common.connection_handler
+def edit_answer(cursor: RealDictCursor, id, message):
+    cursor.execute(
+        """
+        UPDATE answer SET message = %(message)s
+        WHERE id = %(id)s;""",
+        {"id": id, "message": message},
+    )
+

@@ -205,9 +205,23 @@ def add_answer_comment(answer_id):
     )
 
 
-@app.route("/answer/<answer_id>/edit")
-def edit_answer():
-    pass
+@app.route("/answer/<answer_id>/edit", methods=["GET", "POST"])
+def edit_answer(answer_id):
+    answer = data_manager.get_answers_by_answer_id(answer_id)
+    if request.method == "POST":
+        message = request.form.get("message")
+        data_manager.edit_answer(answer_id, message)
+        return redirect(
+            url_for(
+                "display_question_by_id",
+                question_id=id,
+            )
+        )
+    return render_template(
+        "edit_answer.html",
+        answer=answer,
+        answer_id=answer_id,
+    )
 
 
 @app.route("/comment/<comment_id>/edit")
