@@ -77,11 +77,13 @@ block content %}
             </td>
         </tr>
 
+
+
 {% endfor %}
     </tbody>
     </table>
-    <h1>{{question_id}}</h1>
-    <form class="btn btn-success" action="{{ url_for('add_new_question' , question_id=question_id)}}">
+
+    <form class="btn btn-success" action="{{ url_for('add_new_question' , question_id=question_id)}} ">
         <button class="btn btn-success" type="submit">Add a question</button>
 </form>
 

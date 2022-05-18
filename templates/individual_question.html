@@ -34,6 +34,22 @@ content %}
         <button class="btn btn-danger" type="submit">Delete question</button>
         </form>
 </div>
+<br />
+
+<h2>QUESTION COMMENTS</h2>
+{% for comment in question_comment %}
+<div class="card">
+        <h5 class="card-title">{{ comment.submission_time }}</h5>
+        <p class="card-text">{{ comment.message }}</p>
+</div>
+{% endfor %}
+    <br>
+    <form
+        class="d-inline"
+        action="{{ url_for('add_question_comment', question_id=question_id)}}"
+    >
+        <button class="btn btn-success" type="submit">Add question comment</button>
+    </form>
 <br /><br />
 
 <h2>ANSWERS</h2>
@@ -57,6 +73,10 @@ content %}
         <h5 class="card-title">{{ answer.submission_time }}</h5>
         <p class="card-text">{{ answer.message }}</p>
         <p class="card-link">{{ answer.vote_number }}</p>
+
+        <a href="{{ url_for('edit_answer', answer_id=answer.id)}}"> Edit answer</a>
+<br><br>
+
         <div class="d-flex">
             <form
                 class="d-inline"
@@ -84,4 +104,20 @@ content %}
 </div>
 <br />
 {% endfor %}
+
+<h2>ANSWER COMMENTS</h2>
+{% for comment in answer_comment %}
+<div class="card">
+        <h5 class="card-title">{{ comment.submission_time }}</h5>
+        <p class="card-text">{{ comment.message }}</p>
+</div>
+{% endfor %}
+    <br>
+    <form
+        class="d-inline"
+        action="{{ url_for('add_answer_comment', answer_id=answer_id)}}"
+    >
+        <button class="btn btn-success" type="submit">Add answer comment</button>
+    </form>
+<br /><br />
 {% endblock %}

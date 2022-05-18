@@ -49,7 +49,7 @@ def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
 
 
 @database_common.connection_handler
-def get_answers_by_answer_id(cursor: RealDictCursor, id) -> list:
+def get_answers_by_answer_id(cursor: RealDictCursor, id:int) -> list:
     cursor.execute(
         f"""
         SELECT * 
@@ -75,10 +75,10 @@ def write_question(cursor, title, message, image):
     cursor.execute(
         """
     INSERT INTO question (submission_time,view_number, vote_number, title, message, image)
-    VALUES (now()::timestamp(0), 0, 0, %(title)s, %(message)s, %(image)s);""",
+    VALUES (now()::timestamp(0), 0, 0, %(title)s, %(message)s, %(image)s) returning id;""",
         {"title": title, "message": message, "image": image},
     )
-
+    return cursor.fetchone()
 
 @database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id, message, image):
@@ -156,6 +156,7 @@ def vote_up_answer(cursor: RealDictCursor, id):
 
     )
 
+
 @database_common.connection_handler
 def vote_down_answer(cursor: RealDictCursor, id):
     cursor.execute(
@@ -167,6 +168,49 @@ def vote_down_answer(cursor: RealDictCursor, id):
 
 
 @database_common.connection_handler
+def get_question_comments(cursor: RealDictCursor, id) -> list:
+    cursor.execute(
+        """
+        SELECT message, submission_time
+        FROM comment
+        WHERE question_id = %(id)s;""",
+        {"id": id},
+    )
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_answer_comments(cursor: RealDictCursor, id) -> list:
+    cursor.execute(
+        """
+        SELECT message, submission_time
+        FROM comment
+        WHERE answer_id = %(id)s;""",
+        {"id": id},
+    )
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def add_question_comment(cursor: RealDictCursor, id, message):
+    cursor.execute(
+        """
+        INSERT INTO comment (question_id, message, submission_time, edited_count)
+        VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);""",
+        {'id': id, 'message': message}
+    )
+
+
+@database_common.connection_handler
+def add_answer_comment(cursor: RealDictCursor, id, message):
+    cursor.execute(
+        """
+        INSERT INTO comment (answer_id, message, submission_time, edited_count)
+        VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);""",
+        {'id': id, 'message': message}
+    )
+
+
 def get_id_question_by_id_answer(cursor, answer_id):
     cursor.execute(
         """
@@ -175,4 +219,14 @@ def get_id_question_by_id_answer(cursor, answer_id):
         {"answer_id": answer_id},
     )
     return cursor.fetchone()
+
+
+@database_common.connection_handler
+def edit_answer(cursor: RealDictCursor, id, message):
+    cursor.execute(
+        """
+        UPDATE answer SET message = %(message)s, submission_time = now()::timestamp(0) 
+        WHERE id = %(id)s;""",
+        {"id": id, "message": message},
+    )
 
