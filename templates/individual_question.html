@@ -1,5 +1,6 @@
-{% extends "base.html" %} {% block title %}Question{% endblock title %} {% block
-content %}
+{% extends "base.html" %}
+{% block title %}Question{% endblock title %}
+{% block content %}
 <h2>QUESTION</h2>
 
 <table class="table table-bordered">
@@ -16,8 +17,6 @@ content %}
         </tr>
     </tbody>
 </table>
-
-<div class="d-grid gap-2 d-md-block">
     <form
         class="d-inline"
         action="{{ url_for('edit_question', question_id=question_id)}}"
@@ -32,9 +31,24 @@ content %}
         >
         <button class="btn btn-danger" type="submit">Delete question</button>
         </form>
+    <br><br>
+    <h2>TAGS</h2>
+    {% for tag in tags %}
+    <a href="">{{ tag.name }}</a>
+    {% endfor %}
+    <br>
+<div class="d-grid gap-2 d-md-block">
+
+    <form
+            class="d-inline"
+            action="{{ url_for('add_question_tag', question_id=question_id) }}"
+            method="GET">
+    <button class="btn btn-danger" type="submit">Add question tag</button>
+    </form>
 </div>
 <br />
 
+    <br>
 <h2>QUESTION COMMENTS</h2>
 {% for comment in question_comment %}
 <div class="card">

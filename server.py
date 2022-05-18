@@ -26,10 +26,10 @@ def display_questions():
 
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def display_question_by_id(question_id):
-    if request.method == "POST":
-        return redirect(
-            "{{ url_for('display_question_by_id', question_id=question_id) }}"
-        )
+    # if request.method == "POST":
+    #     return redirect(
+    #         url_for('display_question_by_id', question_id=question_id)
+    #     )
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     question_comment = data_manager.get_question_comments(question_id)
@@ -39,6 +39,7 @@ def display_question_by_id(question_id):
         answers=answers,
         question_id=question_id,
         question_comment=question_comment,
+        tags=data_manager.get_tags_by_question_id(question_id),
     )
 
 
@@ -236,9 +237,38 @@ def delete_comment():
     pass
 
 
-@app.route("/question/<question_id>/new-tag")
-def add_question_tag():
-    pass
+@app.route("/question/<question_id>/new-tag", methods=["GET", "POST"])
+def add_question_tag(question_id):
+    if request.method == "POST":
+        tag = request.form.get("tag")
+        if tag == "":
+            tag = request.form.get("name")
+        tag_id = data_manager.get_tag_id(tag)
+        if tag_id is None:
+            data_manager.add_new_tag(tag)
+            tag_id = data_manager.get_tag_id(tag)
+        data_manager.add_question_tag(question_id, dict(tag_id)["id"])
+        return redirect(
+            url_for(
+                "display_question_by_id",
+                question_id=question_id,
+            )
+        )
+    return render_template(
+        "add_tag.html", question_id=question_id, tags=data_manager.get_tags()
+    )
+
+    # tags = data_manager.get_tags()
+    # list_of_tags = []
+    # tag_id = 1
+    # if request.method == 'POST':
+    #     for tag in tags:
+    #         list_of_tags.append(dict(tag)['name'])
+    #         if dict(tag)['name'] == request.form.get('name'):
+    #             tag_id = dict(tag)['id']
+    #     data_manager.add_question_tag(question_id, tag_id)
+    #     if request.form.get('name') not in list_of_tags:
+    #         data_manager.add_new_tag(request.form.get('name'))
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
