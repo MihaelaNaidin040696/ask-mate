@@ -105,12 +105,12 @@ def delete_question(cursor: RealDictCursor, id):
 
 @database_common.connection_handler
 def delete_answer(cursor: RealDictCursor, id):
-        cursor.execute(
-            """
+    cursor.execute(
+        """
             DELETE FROM comment WHERE answer_id = %(id)s;
             DELETE FROM answer WHERE id = %(id)s;""",
-            {"id": id},
-        )
+        {"id": id},
+    )
 
 
 @database_common.connection_handler
@@ -275,9 +275,11 @@ def add_question_tag(cursor: RealDictCursor, question_id, tag_id):
         {"question_id": question_id, "tag_id": tag_id},
     )
 
+
 @database_common.connection_handler
 def delete_tag(cursor, question_id, tag_id):
-    cursor.execute("""    
+    cursor.execute(
+        """    
     DELETE FROM question_tag WHERE question_id = %(question_id)s and tag_id = %(tag_id)s""",
-                   {'tag_id': tag_id, 'question_id': question_id}
-                   )
+        {"tag_id": tag_id, "question_id": question_id},
+    )

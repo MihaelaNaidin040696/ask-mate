@@ -266,7 +266,8 @@ def delete_question_tag(question_id, tag_id):
         url_for(
             "display_question_by_id",
             question_id=question_id,
-        ))
+        )
+    )
 
 
 if __name__ == "__main__":
