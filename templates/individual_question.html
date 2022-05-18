@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Question{% endblock title %} {% block
 content %}
 <h2>QUESTION</h2>
-<h1>{{question_id}}</h1>
+
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -95,7 +95,8 @@ content %}
             </form>
             <form
                 class="d-inline ml-auto"
-                action="{{ url_for('delete_answers', answer_id=answer.id)}}"
+                action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
+                method="post"
             >
                 <button class="btn btn-danger" type="submit">
                     Delete answer
