@@ -49,25 +49,23 @@ def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
 
 
 @database_common.connection_handler
-def get_answers_by_answer_id(cursor: RealDictCursor, id:int) -> list:
+def get_answers_by_answer_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute(
         f"""
         SELECT * 
         FROM answer 
         WHERE id = {id};"""
-
     )
     return cursor.fetchone()
 
 
 @database_common.connection_handler
-def get_comments_by_comment_id(cursor: RealDictCursor, id:int) -> list:
+def get_comments_by_comment_id(cursor: RealDictCursor, id: int) -> list:
     cursor.execute(
         f"""
         SELECT * 
         FROM comment 
         WHERE id = {id};"""
-
     )
     return cursor.fetchone()
 
@@ -91,6 +89,7 @@ def write_question(cursor, title, message, image):
         {"title": title, "message": message, "image": image},
     )
     return cursor.fetchone()
+
 
 @database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id, message, image):
@@ -165,7 +164,6 @@ def vote_up_answer(cursor: RealDictCursor, id):
         UPDATE answer SET vote_number = vote_number + 1
         WHERE id = %(id)s ;""",
         {"id": id},
-
     )
 
 
@@ -183,7 +181,7 @@ def vote_down_answer(cursor: RealDictCursor, id):
 def get_question_comments(cursor: RealDictCursor, id) -> list:
     cursor.execute(
         """
-        SELECT message, submission_time
+        SELECT *
         FROM comment
         WHERE question_id = %(id)s;""",
         {"id": id},
@@ -195,7 +193,7 @@ def get_question_comments(cursor: RealDictCursor, id) -> list:
 def get_answer_comments(cursor: RealDictCursor, id) -> list:
     cursor.execute(
         """
-        SELECT message, submission_time
+        SELECT message, submission_time, edited_count
         FROM comment
         WHERE answer_id = %(id)s;""",
         {"id": id},
@@ -209,7 +207,7 @@ def add_question_comment(cursor: RealDictCursor, id, message):
         """
         INSERT INTO comment (question_id, message, submission_time, edited_count)
         VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);""",
-        {'id': id, 'message': message}
+        {"id": id, "message": message},
     )
 
 
@@ -219,18 +217,44 @@ def add_answer_comment(cursor: RealDictCursor, id, message):
         """
         INSERT INTO comment (answer_id, message, submission_time, edited_count)
         VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);""",
-        {'id': id, 'message': message}
+        {"id": id, "message": message},
     )
 
 
-def get_id_question_by_id_answer(cursor, answer_id):
+@database_common.connection_handler
+def get_id_question_by_id_answer(cursor: RealDictCursor, answer_id):
     cursor.execute(
         """
         SELECT question_id FROM answer
-        WHERE question_id = %(answer_id)s;""",
+        WHERE id = %(answer_id)s;""",
         {"answer_id": answer_id},
     )
-    return cursor.fetchone()
+    answer_dict = cursor.fetchone()
+    return answer_dict["question_id"]
+
+
+@database_common.connection_handler
+def get_id_question_by_id_comment(cursor: RealDictCursor, comment_id):
+    cursor.execute(
+        """
+        SELECT question_id FROM comment
+        WHERE id = %(comment_id)s;""",
+        {"comment_id": comment_id},
+    )
+    answer_dict = cursor.fetchone()
+    return dict(answer_dict)["question_id"]
+
+
+@database_common.connection_handler
+def get_id_answer_by_id_comment(cursor: RealDictCursor, comment_id):
+    cursor.execute(
+        """
+        SELECT answer_id FROM comment
+        WHERE id = %(comment_id)s;""",
+        {"comment_id": comment_id},
+    )
+    answer_dict = cursor.fetchone()
+    return dict(answer_dict)["answer_id"]
 
 
 @database_common.connection_handler
@@ -261,10 +285,6 @@ def delete_comment(cursor: RealDictCursor, id):
     cursor.execute(
         """
         DELETE FROM comment 
-        WHERE question_id = %(id)s 
-        OR answer_id = %(id)s;""",
+        WHERE id = %(id)s;""",
         {"id": id},
     )
-    question_id = cursor.fetchone()('question_id')
-    return question_id
-

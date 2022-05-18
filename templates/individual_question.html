@@ -42,8 +42,14 @@ content %}
         <h5 class="card-title">{{ comment.submission_time }}</h5>
         <p class="card-text">{{ comment.message }}</p>
         <p class="card-text">{{ comment.edited_count }}</p>
-        <a href="{{ url_for('edit_comment', comment_id=comment.id)}}"> Edit comment</a><br>
-        <a href="{{ url_for('delete_comment', comment_id=comment.id)}}" class="fa fa-trash"> Delete comment</a><br>
+        <form
+        class="d-inline"
+        action="{{ url_for('edit_comment', comment_id=comment.id) }}"
+        >
+        <button class="btn btn-warning" type="submit">Edit comment</button>
+{#            <a href="{{ url_for('edit_comment', comment_id=comment.id) }}">orice</a>#}
+        </form><br>
+        <a href="{{ url_for('delete_comment', comment_id=comment.id) }}" class="fa fa-trash"> Delete comment</a><br>
 
 </div><br>
 {% endfor %}
@@ -77,7 +83,6 @@ content %}
         <h5 class="card-title">{{ answer.submission_time }}</h5>
         <p class="card-text">{{ answer.message }}</p>
         <p class="card-link">{{ answer.vote_number }}</p>
-
         <a href="{{ url_for('edit_answer', answer_id=answer.id)}}"> Edit answer</a>
 <br><br>
 
@@ -109,6 +114,7 @@ content %}
             <div class="card text-center">
                 <h5 class="card-title">{{ comment.submission_time }}</h5>
                 <p class="card-text">{{ comment.message }}</p>
+                <p class="card-text">{{ comment.edited_count }}</p>
             </div>
         {% endfor %}
         <br>
