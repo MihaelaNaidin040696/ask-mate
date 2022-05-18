@@ -2,7 +2,7 @@
     block content %}
         <form
             method="POST"
-            action="{{ url_for('edit_question', question_id=question.id) }}"
+            action="{{ url_for('edit_question', question_id=question_id) }}"
         >
             <p>
                 <label for="title">Title</label><br />
@@ -30,4 +30,5 @@
             </p>
 
             <button type="submit">Edit</button>
+        </form>
 {% endblock %}
