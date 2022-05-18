@@ -225,7 +225,7 @@ def get_id_question_by_id_answer(cursor, answer_id):
 def edit_answer(cursor: RealDictCursor, id, message):
     cursor.execute(
         """
-        UPDATE answer SET message = %(message)s
+        UPDATE answer SET message = %(message)s, submission_time = now()::timestamp(0) 
         WHERE id = %(id)s;""",
         {"id": id, "message": message},
     )
