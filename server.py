@@ -35,6 +35,7 @@ def display_question_by_id(question_id):
         answers=answers,
         question_id=question_id,
         question_comment=question_comment,
+        tags=data_manager.get_tags_by_question_id(question_id),
     )
 
 
@@ -252,9 +253,27 @@ def delete_comment(comment_id):
     )
 
 
-@app.route("/question/<question_id>/new-tag")
-def add_question_tag():
-    pass
+@app.route("/question/<question_id>/new-tag", methods=["GET", "POST"])
+def add_question_tag(question_id):
+    if request.method == "POST":
+        tag = request.form.get("tag")
+        if tag == "":
+            tag = request.form.get("name")
+        tag_id = data_manager.get_tag_id(tag)
+        if tag_id is None:
+            data_manager.add_new_tag(tag)
+            tag_id = data_manager.get_tag_id(tag)
+        data_manager.add_question_tag(question_id, dict(tag_id)["id"])
+        return redirect(
+            url_for(
+                "display_question_by_id",
+                question_id=question_id,
+            )
+        )
+    return render_template(
+        "add_tag.html", question_id=question_id, tags=data_manager.get_tags()
+    )
+
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
