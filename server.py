@@ -27,9 +27,7 @@ def display_questions():
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def display_question_by_id(question_id):
     if request.method == "POST":
-        return redirect(
-            "{{ url_for('display_question_by_id', question_id=question_id) }}"
-        )
+        return redirect("/")
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     question_comment = data_manager.get_question_comments(question_id)
@@ -50,15 +48,16 @@ def add_new_question():
         if file:
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
             image = file.filename
-        data_manager.write_question(
+        qid=data_manager.write_question(
             request.form.get("title").capitalize(),
             request.form.get("message").capitalize(),
             image,
         )
+
         return redirect(
             url_for(
                 "display_question_by_id",
-                question_id=request.args.get("question_id"),
+                question_id=qid.get("id"),
             )
         )
     return render_template("add_question.html")

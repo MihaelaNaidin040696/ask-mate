@@ -87,10 +87,10 @@ def write_question(cursor, title, message, image):
     cursor.execute(
         """
     INSERT INTO question (submission_time,view_number, vote_number, title, message, image)
-    VALUES (now()::timestamp(0), 0, 0, %(title)s, %(message)s, %(image)s);""",
+    VALUES (now()::timestamp(0), 0, 0, %(title)s, %(message)s, %(image)s) returning id;""",
         {"title": title, "message": message, "image": image},
     )
-
+    return cursor.fetchone()
 
 @database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id, message, image):
