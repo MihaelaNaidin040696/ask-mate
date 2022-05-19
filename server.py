@@ -29,12 +29,15 @@ def display_question_by_id(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     question_comment = data_manager.get_question_comments(question_id)
+    answer_id = data_manager.get_answer_id_by_question_id(question_id)
+    answer_comment = data_manager.get_answer_comments(answer_id)
     return render_template(
         "individual_question.html",
         question=question,
         answers=answers,
         question_id=question_id,
         question_comment=question_comment,
+        answer_comment=answer_comment,
         tags=data_manager.get_tags_by_question_id(question_id),
     )
 
@@ -194,7 +197,7 @@ def add_answer_comment(answer_id):
             )
         )
     return render_template(
-        "add_question_comment.html",
+        "add_answer_comment.html",
         answer_id=answer_id,
         question_id=question_id,
     )
