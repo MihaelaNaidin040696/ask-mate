@@ -15,21 +15,17 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def display_questions():
     criteria = request.args.get("order_by", "submission_time")
     direction = request.args.get("order_direction", "desc")
-    headers = data_manager.get_headers()
     sorted_questions = data_manager.sort_questions(criteria, direction)
     return render_template(
         "list_of_questions.html",
         questions=sorted_questions,
-        headers=headers,
     )
 
 
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def display_question_by_id(question_id):
-    # if request.method == "POST":
-    #     return redirect(
-    #         url_for('display_question_by_id', question_id=question_id)
-    #     )
+    if request.method == "POST":
+        return redirect("/")
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     question_comment = data_manager.get_question_comments(question_id)
@@ -51,15 +47,16 @@ def add_new_question():
         if file:
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
             image = file.filename
-        data_manager.write_question(
+        qid = data_manager.write_question(
             request.form.get("title").capitalize(),
             request.form.get("message").capitalize(),
             image,
         )
+
         return redirect(
             url_for(
                 "display_question_by_id",
-                question_id=id,
+                question_id=qid.get("id"),
             )
         )
     return render_template("add_question.html")
@@ -146,28 +143,24 @@ def vote_down_question(question_id):
 
 @app.route("/answer/<answer_id>/vote-up")
 def vote_up_answer(answer_id):
-    answer_id = int(answer_id)
+    question_id = data_manager.get_id_question_by_id_answer(answer_id)
     data_manager.vote_up_answer(answer_id)
     return redirect(
         url_for(
             "display_question_by_id",
-            question_id=dict(data_manager.get_answers_by_answer_id(answer_id))[
-                "question_id"
-            ],
+            question_id=question_id,
         )
     )
 
 
 @app.route("/answer/<answer_id>/vote-down")
 def vote_down_answer(answer_id):
-    answer_id = int(answer_id)
+    question_id = data_manager.get_id_question_by_id_answer(answer_id)
     data_manager.vote_down_answer(answer_id)
     return redirect(
         url_for(
             "display_question_by_id",
-            question_id=dict(data_manager.get_answers_by_answer_id(answer_id))[
-                "question_id"
-            ],
+            question_id=question_id,
         )
     )
 
@@ -190,21 +183,20 @@ def add_question_comment(question_id):
 
 @app.route("/answer/<answer_id>/new-comment", methods=["GET", "POST"])
 def add_answer_comment(answer_id):
+    question_id = data_manager.get_id_question_by_id_answer(answer_id)
     if request.method == "POST":
-        answer_comment = data_manager.add_answer_comment(answer_id)
+        question_id = data_manager.get_id_question_by_id_answer(answer_id)
         data_manager.add_answer_comment(answer_id, request.form.get("message"))
         return redirect(
             url_for(
                 "display_question_by_id",
-                question_id=dict(data_manager.get_answers_by_answer_id(answer_id))[
-                    "question_id"
-                ],
-                answer_comment=answer_comment,
+                question_id=question_id,
             )
         )
     return render_template(
         "add_question_comment.html",
         answer_id=answer_id,
+        question_id=question_id,
     )
 
 
@@ -212,12 +204,13 @@ def add_answer_comment(answer_id):
 def edit_answer(answer_id):
     answer = data_manager.get_answers_by_answer_id(answer_id)
     if request.method == "POST":
+        question_id = data_manager.get_id_question_by_id_answer(answer_id)
         message = request.form.get("message")
         data_manager.edit_answer(answer_id, message)
         return redirect(
             url_for(
                 "display_question_by_id",
-                question_id=id,
+                question_id=question_id,
             )
         )
     return render_template(
@@ -227,14 +220,37 @@ def edit_answer(answer_id):
     )
 
 
-@app.route("/comment/<comment_id>/edit")
-def edit_comment():
-    pass
+@app.route("/comment/<comment_id>/edit", methods=["GET", "POST"])
+def edit_comment(comment_id):
+    question_id = data_manager.get_id_question_by_id_comment(comment_id)
+    comment = data_manager.get_comments_by_comment_id(comment_id)
+    if request.method == "POST":
+        question_id = data_manager.get_id_question_by_id_comment(comment_id)
+        data_manager.edit_comment(comment_id, request.form.get("message"))
+        return redirect(
+            url_for(
+                "display_question_by_id",
+                question_id=question_id,
+            )
+        )
+    return render_template(
+        "edit_comment.html",
+        comment=comment,
+        comment_id=comment_id,
+        question_id=question_id,
+    )
 
 
 @app.route("/comments/<comment_id>/delete")
-def delete_comment():
-    pass
+def delete_comment(comment_id):
+    question_id = data_manager.get_id_question_by_id_comment(comment_id)
+    data_manager.delete_comment(comment_id)
+    return redirect(
+        url_for(
+            "display_question_by_id",
+            question_id=question_id,
+        )
+    )
 
 
 @app.route("/question/<question_id>/new-tag", methods=["GET", "POST"])
