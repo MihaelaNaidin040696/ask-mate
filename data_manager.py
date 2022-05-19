@@ -37,6 +37,19 @@ def get_question_by_id(cursor: RealDictCursor, id) -> list:
 
 
 @database_common.connection_handler
+def get_answer_id_by_question_id(cursor: RealDictCursor, id) -> list:
+    cursor.execute(
+        """
+        SELECT id
+        FROM answer
+        WHERE question_id = %(id)s;""",
+        {"id": id},
+    )
+    answer_dict = cursor.fetchone()
+    return dict(answer_dict)["id"]
+
+
+@database_common.connection_handler
 def get_answers_by_question_id(cursor: RealDictCursor, id) -> list:
     cursor.execute(
         """
