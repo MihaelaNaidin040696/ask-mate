@@ -122,11 +122,13 @@
         </div>
         <h3>ANSWER COMMENTS</h3>
         {% for comment in answer_comment %}
+            {% if answer.id == comment.answer_id %}
             <div class="card text-center">
                 <h5 class="card-title">{{ comment.submission_time }}</h5>
                 <p class="card-text">{{ comment.message }}</p>
                 <p class="card-text">{{ comment.edited_count }}</p>
             </div>
+            {% endif %}
         {% endfor %}
         <br>
         <form

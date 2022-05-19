@@ -45,7 +45,7 @@ def get_answer_id_by_question_id(cursor: RealDictCursor, id) -> list:
         WHERE question_id = %(id)s;""",
         {"id": id},
     )
-    answer_dict = cursor.fetchone()
+    answer_dict = cursor.fetchall()
     return dict(answer_dict)["id"]
 
 
@@ -201,13 +201,11 @@ def get_question_comments(cursor: RealDictCursor, id) -> list:
 
 
 @database_common.connection_handler
-def get_answer_comments(cursor: RealDictCursor, id) -> list:
+def get_comments(cursor: RealDictCursor) -> list:
     cursor.execute(
         """
-        SELECT message, submission_time, edited_count
-        FROM comment
-        WHERE answer_id = %(id)s;""",
-        {"id": id},
+        SELECT *
+        FROM comment;"""
     )
     return cursor.fetchall()
 

@@ -51,8 +51,7 @@ def display_question_by_id(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     question_comment = data_manager.get_question_comments(question_id)
-    answer_id = data_manager.get_answer_id_by_question_id(question_id)
-    answer_comment = data_manager.get_answer_comments(answer_id)
+    answer_comment = data_manager.get_comments()
     return render_template(
         "individual_question.html",
         question=question,
@@ -112,6 +111,8 @@ def add_new_answer(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
 def delete_questions(question_id):
+    answer_id = data_manager.get_answer_id_by_question_id(question_id)
+    data_manager.delete_answer(answer_id)
     data_manager.delete_question(question_id)
     return redirect(
         url_for(
