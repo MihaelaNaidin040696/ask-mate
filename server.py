@@ -11,21 +11,43 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
 @app.route("/")
+def display_latest_questions():
+    latest_questions = data_manager.get_latest_questions()
+    return render_template("latest_questions.html", questions=latest_questions)
+
+
 @app.route("/list")
 def display_questions():
     criteria = request.args.get("order_by", "submission_time")
     direction = request.args.get("order_direction", "desc")
+    search = request.form.get("info")
     sorted_questions = data_manager.sort_questions(criteria, direction)
     return render_template(
         "list_of_questions.html",
         questions=sorted_questions,
+        search=search,
     )
 
 
-@app.route("/question/<question_id>", methods=["GET", "POST"])
+@app.route("/search", methods=["GET", "POST"])
+def search_list():
+    criteria = request.args.get("order_by", "submission_time")
+    direction = request.args.get("order_direction", "desc")
+    search = request.args.get("info")
+    dates_question = data_manager.get_data_for_search_question(search)
+    dates_answer = data_manager.get_data_for_search_answer(search)
+    sorted_questions = data_manager.sort_questions(criteria, direction)
+    return render_template(
+        "list_of_questions.html",
+        questions=sorted_questions,
+        dates=dates_question,
+        search=search,
+        date=dates_answer,
+    )
+
+
+@app.route("/question/<question_id>")
 def display_question_by_id(question_id):
-    if request.method == "POST":
-        return redirect("/")
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     question_comment = data_manager.get_question_comments(question_id)
