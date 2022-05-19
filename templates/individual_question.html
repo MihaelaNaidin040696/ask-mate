@@ -21,7 +21,7 @@
         class="d-inline"
         action="{{ url_for('edit_question', question_id=question_id)}}"
     >
-        <button class="btn btn-warning" type="submit">Edit question</button>
+        <button class="button_btn" type="submit">Edit question</button>
     </form>
 
         <form
@@ -29,7 +29,7 @@
         action="{{ url_for('delete_questions', question_id=question_id)}}"
         method="GET"
         >
-        <button class="btn btn-danger" type="submit">Delete question</button>
+        <button class="button_btn" type="submit">Delete question</button>
         </form>
     <br><br>
     <h2>TAGS</h2>
@@ -43,7 +43,7 @@
             class="d-inline"
             action="{{ url_for('add_question_tag', question_id=question_id) }}"
             method="GET">
-    <button class="btn btn-danger" type="submit">Add question tag</button>
+    <button class="button_btn" type="submit">Add question tag</button>
     </form>
 </div>
 <br />
@@ -58,7 +58,7 @@
         class="d-inline"
         action="{{ url_for('edit_comment', comment_id=comment.id) }}"
         >
-        <button class="btn btn-warning" type="submit">Edit comment</button>
+        <button class="button_btn" type="submit">Edit comment</button>
         </form><br>
         <a href="{{ url_for('delete_comment', comment_id=comment.id) }}" class="fa fa-trash"> Delete comment</a><br>
 
@@ -69,14 +69,14 @@
         class="d-inline"
         action="{{ url_for('add_question_comment', question_id=question_id)}}"
     >
-        <button class="btn btn-success" type="submit">Add question comment</button>
+        <button class="button_btn" type="submit">Add question comment</button>
     </form>
 <br /><br />
 
 <h2>ANSWERS</h2>
 <div class="d-grid gap-2 d-md-block">
     <a href="{{ url_for('add_new_answer', question_id=question_id)}}"
-       class="btn btn-info" >Post an answer</a>
+       class="button_btn" >Post an answer</a>
 </div>
 <br />
 {% for answer in answers %}
@@ -102,20 +102,20 @@
                 class="d-inline"
                 action="{{ url_for('vote_up_answer', answer_id=answer.id, question_id=question_id)}}"
             >
-                <button class="btn btn-primary" type="submit">Vote up</button>
+                <button class="button_btn" type="submit">Vote up</button>
             </form>
             <form
                 class="d-inline ml-1"
                 action="{{ url_for('vote_down_answer', answer_id=answer.id)}}"
             >
-                <button class="btn btn-danger" type="submit">Vote down</button>
+                <button class="button_btn" type="submit">Vote down</button>
             </form>
             <form
                 class="d-inline ml-auto"
                 action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
                 method="post"
             >
-                <button class="btn btn-danger" type="submit">
+                <button class="button_btn" type="submit">
                     Delete answer
                 </button>
             </form>
@@ -133,7 +133,7 @@
                 class="d-inline"
                 action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
         >
-            <button class="btn btn-success" type="submit">Add answer comment</button>
+            <button class="button_btn" type="submit">Add answer comment</button>
         </form>
         <br /><br />
     </div>

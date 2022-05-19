@@ -2,14 +2,15 @@
 {% block title %}Question list{% endblock title %}
 {% block content %}
 
+<br>
 <form
     class="d-inline"
     action="{{ url_for('display_latest_questions') }}"
 >
-    <button class="btn btn-warning" type="submit">Latest questions</button>
+    <button class="button_btn" type="submit">Latest questions</button>
 </form>
 
-<form>
+<form action="/list">
     <select
         class="form-select form-select-lg mb-3"
         aria-label=".form-select-lg example"
@@ -32,12 +33,12 @@
         <option value="asc">Ascending</option>
         <option value="desc">Descending</option>
     </select>
-    <button class="btn btn-primary" type="submit">Sort</button>
+    <button class="button_btn" type="submit">Sort</button>
 </form>
 
 <form action="{{ url_for('search_list' , question_id=question_id)}}" method="get">
     <input type="text" name="info" id="info" required>
-    <input type="submit" value="Search">
+    <button class="button_btn" type="submit">Search</button>
 </form>
 
 <table class="table table-striped table-hover">
@@ -80,14 +81,14 @@
                 <form
                     action="{{ url_for('vote_up_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-primary" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote up
                     </button>
                 </form>
                 <form
                     action="{{ url_for('vote_down_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-danger" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote down
                     </button>
                 </form>
@@ -136,14 +137,14 @@
                 <form
                     action="{{ url_for('vote_up_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-primary" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote up
                     </button>
                 </form>
                 <form
                     action="{{ url_for('vote_down_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-danger" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote down
                     </button>
                 </form>
