@@ -357,3 +357,36 @@ def delete_tag(cursor, question_id, tag_id):
     DELETE FROM question_tag WHERE question_id = %(question_id)s and tag_id = %(tag_id)s""",
         {"tag_id": tag_id, "question_id": question_id},
     )
+
+
+@database_common.connection_handler
+def get_data_for_search_question(cursor, search):
+    cursor.execute(
+        """
+        SELECT * FROM question
+        WHERE title ilike %(search)s or message ilike %(search)s or image ilike %(search)s;""",
+        {"search": f"%{search}%"},
+    )
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_data_for_search_answer(cursor, search):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        WHERE message ilike %(search)s or image ilike %(search)s;""",
+        {"search": f"%{search}%"},
+    )
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_latest_questions(cursor):
+    cursor.execute("""
+        SELECT submission_time, title, message 
+        FROM question
+        ORDER BY submission_time
+        LIMIT 5""")
+    return cursor.fetchall()
+
