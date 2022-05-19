@@ -275,7 +275,6 @@ def add_question_tag(question_id):
     )
 
 
-
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
 def delete_question_tag():
     pass

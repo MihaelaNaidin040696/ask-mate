@@ -60,6 +60,17 @@ def get_answers_by_answer_id(cursor: RealDictCursor, id: int) -> list:
 
 
 @database_common.connection_handler
+def get_comments_by_comment_id(cursor: RealDictCursor, id: int) -> list:
+    cursor.execute(
+        f"""
+        SELECT * 
+        FROM comment 
+        WHERE id = {id};"""
+    )
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
 def sort_questions(cursor: RealDictCursor, criteria, direction) -> list:
     query = f"""
         SELECT * 
