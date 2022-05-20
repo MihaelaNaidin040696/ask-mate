@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Question{% endblock title %}
+{% block content %}
+<h2>Latest 5 questions</h2>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+
+            <th>Title</th>
+            <th>Message</th>
+            <th>Submission Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in questions %}
+        <tr>
+            <td>{{ question.title }}</td>
+            <td>{{ question.message }}</td>
+            <td>{{ question.submission_time }}</td>
+            <td>
+                {% if question.image %}
+                <img
+                    src="{{ url_for('static', filename='images/' + question.image) }}"
+                    alt="No image found"
+                />
+                {% endif %}
+            </td>
+        </tr>
+{% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
