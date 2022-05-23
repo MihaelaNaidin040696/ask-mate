@@ -381,10 +381,11 @@ def get_data_for_search_answer(cursor, search):
 
 @database_common.connection_handler
 def get_latest_questions(cursor):
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT submission_time, title, message 
         FROM question
         ORDER BY submission_time
-        LIMIT 5""")
+        LIMIT 5"""
+    )
     return cursor.fetchall()
-
