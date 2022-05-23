@@ -1,12 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Question list{% endblock title %}
-{% block content %}
 
-<br>
-<form
-    class="d-inline"
-    action="{{ url_for('display_latest_questions') }}"
->
+{% block title %}Question list{% endblock title %}
+
+{% block content %}
+<form class="d-inline" action="{{ url_for('display_latest_questions') }}">
     <button class="button_btn" type="submit">Latest questions</button>
 </form>
 
@@ -20,7 +17,6 @@
         <option value="title">Title</option>
         <option value="submission_time">Time</option>
         <option value="message">Message</option>
-{#        <option value="view_number">Views</option>#}
         <option value="vote_number">Votes</option>
     </select>
 
@@ -36,8 +32,11 @@
     <button class="button_btn" type="submit">Sort</button>
 </form>
 
-<form action="{{ url_for('search_list' , question_id=question_id)}}" method="get">
-    <input type="text" name="info" id="info" required>
+<form
+    action="{{ url_for('search_list' , question_id=question_id)}}"
+    method="get"
+>
+    <input type="text" name="info" id="info" required />
     <button class="button_btn" type="submit">Search</button>
 </form>
 
@@ -46,7 +45,6 @@
         <tr>
             <th>Id</th>
             <th>Submission Time</th>
-{#            <th>View Number</th>#}
             <th>Vote Number</th>
             <th>Title</th>
             <th>Message</th>
@@ -56,109 +54,94 @@
     </thead>
     <tbody>
         {% if search == None %}
-        {% for question in questions %}
-        <tr>
-            <td>{{ question.id }}</td>
-            <td>{{ question.submission_time }}</td>
-{#            <td>{{ question.view_number }}</td>#}
-            <td>{{ question.vote_number }}</td>
-            <td>
-                <a
-                    href="{{ url_for('display_question_by_id', question_id=question.id) }}"
-                    >{{ question.title }}</a
-                >
-            </td>
-            <td>{{ question.message }}</td>
-            <td>
-                {% if question.image %}
-                <img
-                    src="{{ url_for('static', filename='images/' + question.image) }}"
-                    alt="No image found"
-                />
-                {% endif %}
-            </td>
-            <td>
-                <form
-                    action="{{ url_for('vote_up_question', question_id=question.id)}}"
-                >
-                    <button class="button_btn" type="submit">
-                        Vote up
-                    </button>
-                </form>
-                <form
-                    action="{{ url_for('vote_down_question', question_id=question.id)}}"
-                >
-                    <button class="button_btn" type="submit">
-                        Vote down
-                    </button>
-                </form>
-            </td>
-        </tr>
-
-{% endfor %}
-{% endif %}
-{% if search != None %}
-{% for answer in date %}
-{% for question in dates %}
-
-{% if answer.question_id == question.id %}
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{answer.message}}</td>
-                <td>{{answer.image}}</td>
-                <td></td>
-            <tr>
-
-            <td>{{ question.id }}</td>
-            <td>{{ question.submission_time }}</td>
-            <td>{{ question.view_number }}</td>
-            <td>{{ question.vote_number }}</td>
-                <td>
-                <a
-                    href="{{ url_for('display_question_by_id', question_id=question.id) }}"
-                    >{{ question.title }}</a
-                >
-            </td>
-            <td>{{ question.message }}</td>
-
-            <td>
-                {% if question.image %}
-                <img
-                    src="{{ url_for('static', filename='images/' + question.image) }}"
-                    alt="No image found"
-                />
-                {% endif %}
-            </td>
-            <td>
-                <form
-                    action="{{ url_for('vote_up_question', question_id=question.id)}}"
-                >
-                    <button class="button_btn" type="submit">
-                        Vote up
-                    </button>
-                </form>
-                <form
-                    action="{{ url_for('vote_down_question', question_id=question.id)}}"
-                >
-                    <button class="button_btn" type="submit">
-                        Vote down
-                    </button>
-                </form>
-            </td>
-        </tr>
-
-
-            {% endif%}
+            {% for question in questions %}
+                <tr>
+                    <td>{{ question.id }}</td>
+                    <td>{{ question.submission_time }}</td>
+                    <td>{{ question.vote_number }}</td>
+                    <td>
+                        <a
+                            href="{{ url_for('display_question_by_id', question_id=question.id) }}"
+                            >{{ question.title }}</a
+                        >
+                    </td>
+                    <td>{{ question.message }}</td>
+                    <td>
+                        {% if question.image %}
+                        <img
+                            src="{{ url_for('static', filename='images/' + question.image) }}"
+                            alt="No image found"
+                        />
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form
+                            action="{{ url_for('vote_up_question', question_id=question.id)}}"
+                        >
+                            <button class="button_btn" type="submit">Vote up</button>
+                        </form>
+                        <form
+                            action="{{ url_for('vote_down_question', question_id=question.id)}}"
+                        >
+                            <button class="button_btn" type="submit">Vote down</button>
+                        </form>
+                    </td>
+                </tr>
             {% endfor %}
+        {% endif %}
+        
+        {% if search != None %}
+            {% for answer in date %}
+                {% for question in dates %}
+                    {% if answer.question_id == question.id %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{answer.message}}</td>
+                            <td>{{answer.image}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>{{ question.id }}</td>
+                            <td>{{ question.submission_time }}</td>
+                            <td>{{ question.view_number }}</td>
+                            <td>{{ question.vote_number }}</td>
+                            <td>
+                                <a
+                                    href="{{ url_for('display_question_by_id', question_id=question.id) }}"
+                                    >{{ question.title }}</a
+                                >
+                            </td>
+                            <td>{{ question.message }}</td>
+                            <td>
+                                {% if question.image %}
+                                    <img
+                                        src="{{ url_for('static', filename='images/' + question.image) }}"
+                                        alt="No image found"
+                                    />
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form
+                                    action="{{ url_for('vote_up_question', question_id=question.id)}}"
+                                >
+                                    <button class="button_btn" type="submit">Vote up</button>
+                                </form>
+                                <form
+                                    action="{{ url_for('vote_down_question', question_id=question.id)}}"
+                                >
+                                    <button class="button_btn" type="submit">Vote down</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif%}
+                {% endfor %}
             {% endfor%}
         {% endif %}
     </tbody>
-    </table>
-
-
+</table>
 
 {% endblock %}

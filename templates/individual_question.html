@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% block title %}Question{% endblock title %}
+
 {% block content %}
 <h2>QUESTION</h2>
 
@@ -17,33 +19,35 @@
         </tr>
     </tbody>
 </table>
-    <form
-        class="d-inline"
-        action="{{ url_for('edit_question', question_id=question_id)}}"
-    >
-        <button class="button_btn" type="submit">Edit question</button>
-    </form>
+<form
+    class="d-inline"
+    action="{{ url_for('edit_question', question_id=question_id)}}"
+>
+    <button class="button_btn" type="submit">Edit question</button>
+</form>
 
-        <form
-        class="d-inline"
-        action="{{ url_for('delete_questions', question_id=question_id)}}"
-        method="GET"
-        >
-        <button class="button_btn" type="submit">Delete question</button>
-        </form>
-    <br><br>
-    <h2>TAGS</h2>
-    {% for tag in tags %}
-    <a href="{{ url_for('delete_question_tag', question_id=question_id, tag_id=tag.id) }}">{{ tag.name }}</a>
-    {% endfor %}
-    <br>
+<form
+    class="d-inline"
+    action="{{ url_for('delete_questions', question_id=question_id)}}"
+>
+    <button class="button_btn" type="submit">Delete question</button>
+</form>
+<br /><br />
+<h2>TAGS</h2>
+{% for tag in tags %}
+<a
+    href="{{ url_for('delete_question_tag', question_id=question_id, tag_id=tag.id) }}"
+    >{{ tag.name }}</a
+>
+{% endfor %}
+<br />
 <div class="d-grid gap-2 d-md-block">
-
     <form
-            class="d-inline"
-            action="{{ url_for('add_question_tag', question_id=question_id) }}"
-            method="GET">
-    <button class="button_btn" type="submit">Add question tag</button>
+        class="d-inline"
+        action="{{ url_for('add_question_tag', question_id=question_id) }}"
+        method="GET"
+    >
+        <button class="button_btn" type="submit">Add question tag</button>
     </form>
 </div>
 <br />
@@ -51,32 +55,41 @@
 <h3>QUESTION COMMENTS</h3>
 {% for comment in question_comment %}
 <div class="card text-center">
-        <h5 class="card-title">{{ comment.submission_time }}</h5>
-        <p class="card-text">{{ comment.message }}</p>
-        <p class="card-text">{{ comment.edited_count }}</p>
-        <form
-        class="d-inline"
-        action="{{ url_for('edit_comment', comment_id=comment.id) }}"
-        >
-        <button class="button_btn" type="submit">Edit comment</button>
-        </form><br>
-        <a href="{{ url_for('delete_comment', comment_id=comment.id) }}" class="fa fa-trash"> Delete comment</a><br>
-
-</div><br>
-{% endfor %}
-    <br>
+    <h5 class="card-title">{{ comment.submission_time }}</h5>
+    <p class="card-text">{{ comment.message }}</p>
+    <p class="card-text">{{ comment.edited_count }}</p>
     <form
         class="d-inline"
-        action="{{ url_for('add_question_comment', question_id=question_id)}}"
+        action="{{ url_for('edit_comment', comment_id=comment.id) }}"
     >
-        <button class="button_btn" type="submit">Add question comment</button>
+        <button class="button_btn" type="submit">Edit comment</button>
     </form>
+    <br />
+    <a
+        href="{{ url_for('delete_comment', comment_id=comment.id) }}"
+        class="fa fa-trash"
+    >
+        Delete comment</a
+    ><br />
+</div>
+<br />
+{% endfor %}
+<br />
+<form
+    class="d-inline"
+    action="{{ url_for('add_question_comment', question_id=question_id)}}"
+>
+    <button class="button_btn" type="submit">Add question comment</button>
+</form>
 <br /><br />
 
 <h2>ANSWERS</h2>
 <div class="d-grid gap-2 d-md-block">
-    <a href="{{ url_for('add_new_answer', question_id=question_id)}}"
-       class="button_btn" >Post an answer</a>
+    <a
+        href="{{ url_for('add_new_answer', question_id=question_id)}}"
+        class="button_btn"
+        >Post an answer</a
+    >
 </div>
 <br />
 {% for answer in answers %}
@@ -94,8 +107,10 @@
         <h5 class="card-title">{{ answer.submission_time }}</h5>
         <p class="card-text">{{ answer.message }}</p>
         <p class="card-link">{{ answer.vote_number }}</p>
-        <a href="{{ url_for('edit_answer', answer_id=answer.id)}}"> Edit answer</a>
-<br><br>
+        <a href="{{ url_for('edit_answer', answer_id=answer.id)}}">
+            Edit answer</a
+        >
+        <br /><br />
 
         <div class="d-flex">
             <form
@@ -115,25 +130,23 @@
                 action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
                 method="post"
             >
-                <button class="button_btn" type="submit">
-                    Delete answer
-                </button>
+                <button class="button_btn" type="submit">Delete answer</button>
             </form>
         </div>
         <h3>ANSWER COMMENTS</h3>
         {% for comment in answer_comment %}
             {% if answer.id == comment.answer_id %}
-            <div class="card text-center">
-                <h5 class="card-title">{{ comment.submission_time }}</h5>
-                <p class="card-text">{{ comment.message }}</p>
-                <p class="card-text">{{ comment.edited_count }}</p>
-            </div>
+                <div class="card text-center">
+                    <h5 class="card-title">{{ comment.submission_time }}</h5>
+                    <p class="card-text">{{ comment.message }}</p>
+                    <p class="card-text">{{ comment.edited_count }}</p>
+                </div>
             {% endif %}
         {% endfor %}
-        <br>
+        <br />
         <form
-                class="d-inline"
-                action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
+            class="d-inline"
+            action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
         >
             <button class="button_btn" type="submit">Add answer comment</button>
         </form>
@@ -142,4 +155,5 @@
 </div>
 <br />
 {% endfor %}
+
 {% endblock %}
