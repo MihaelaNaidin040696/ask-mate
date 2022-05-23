@@ -10,6 +10,23 @@ UPLOAD_FOLDER = (
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
+def get_request_data():
+    return (
+        request.values.get("order_by", "submission_time"),
+        request.values.get("order_direction", "desc"),
+        request.values.get("info"),
+    )
+
+
+def upload_image():
+    image = ""
+    file = request.files["image"]
+    if file:
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+        image = file.filename
+    return image
+
+
 @app.route("/")
 def display_latest_questions():
     latest_questions = data_manager.get_latest_questions()
@@ -18,9 +35,7 @@ def display_latest_questions():
 
 @app.route("/list")
 def display_questions():
-    criteria = request.args.get("order_by", "submission_time")
-    direction = request.args.get("order_direction", "desc")
-    search = request.form.get("info")
+    criteria, direction, search = get_request_data()
     sorted_questions = data_manager.sort_questions(criteria, direction)
     return render_template(
         "list_of_questions.html",
@@ -31,9 +46,7 @@ def display_questions():
 
 @app.route("/search", methods=["GET", "POST"])
 def search_list():
-    criteria = request.args.get("order_by", "submission_time")
-    direction = request.args.get("order_direction", "desc")
-    search = request.args.get("info")
+    criteria, direction, search = get_request_data()
     dates_question = data_manager.get_data_for_search_question(search)
     dates_answer = data_manager.get_data_for_search_answer(search)
     sorted_questions = data_manager.sort_questions(criteria, direction)
@@ -66,11 +79,7 @@ def display_question_by_id(question_id):
 @app.route("/add-question", methods=["GET", "POST"])
 def add_new_question():
     if request.method == "POST":
-        image = ""
-        file = request.files["image"]
-        if file:
-            file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
-            image = file.filename
+        image = upload_image()
         qid = data_manager.write_question(
             request.form.get("title").capitalize(),
             request.form.get("message").capitalize(),
@@ -89,13 +98,11 @@ def add_new_question():
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def add_new_answer(question_id):
     if request.method == "POST":
-        file = request.files["image"]
-        image = ""
-        if file:
-            file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
-            image = file.filename
+        image = upload_image()
         data_manager.write_answer(
-            question_id, request.form.get("message").capitalize(), image
+            question_id,
+            request.form.get("message").capitalize(),
+            image,
         )
         return redirect(
             url_for(
@@ -111,8 +118,6 @@ def add_new_answer(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
 def delete_questions(question_id):
-    # answer_id = data_manager.get_answer_id_by_question_id(question_id)
-    # data_manager.delete_answer(answer_id)
     data_manager.delete_question(question_id)
     return redirect(
         url_for(
@@ -155,40 +160,40 @@ def edit_question(question_id):
     )
 
 
+def vote_question(qid, callback):
+    callback(qid)
+    return redirect(url_for("display_questions"))
+
+
+def vote_answer(aid, callback):
+    question_id = data_manager.get_id_question_by_id_answer(aid)
+    callback(aid)
+    return redirect(
+        url_for(
+            "display_question_by_id",
+            question_id=question_id,
+        )
+    )
+
+
 @app.route("/question/<question_id>/vote-up")
 def vote_up_question(question_id):
-    data_manager.vote_up_question(question_id)
-    return redirect(url_for("display_questions"))
+    return vote_question(question_id, data_manager.vote_up_question)
 
 
 @app.route("/question/<question_id>/vote-down")
 def vote_down_question(question_id):
-    data_manager.vote_down_question(question_id)
-    return redirect(url_for("display_questions"))
+    return vote_question(question_id, data_manager.vote_down_question)
 
 
 @app.route("/answer/<answer_id>/vote-up")
 def vote_up_answer(answer_id):
-    question_id = data_manager.get_id_question_by_id_answer(answer_id)
-    data_manager.vote_up_answer(answer_id)
-    return redirect(
-        url_for(
-            "display_question_by_id",
-            question_id=question_id,
-        )
-    )
+    return vote_answer(answer_id, data_manager.vote_up_answer)
 
 
 @app.route("/answer/<answer_id>/vote-down")
 def vote_down_answer(answer_id):
-    question_id = data_manager.get_id_question_by_id_answer(answer_id)
-    data_manager.vote_down_answer(answer_id)
-    return redirect(
-        url_for(
-            "display_question_by_id",
-            question_id=question_id,
-        )
-    )
+    return vote_answer(answer_id, data_manager.vote_down_answer)
 
 
 @app.route("/question/<question_id>/new-comment", methods=["GET", "POST"])
@@ -211,7 +216,6 @@ def add_question_comment(question_id):
 def add_answer_comment(answer_id):
     question_id = data_manager.get_id_question_by_id_answer(answer_id)
     if request.method == "POST":
-        question_id = data_manager.get_id_question_by_id_answer(answer_id)
         data_manager.add_answer_comment(answer_id, request.form.get("message"))
         return redirect(
             url_for(
@@ -251,7 +255,6 @@ def edit_comment(comment_id):
     question_id = data_manager.get_id_question_by_id_comment(comment_id)
     comment = data_manager.get_comments_by_comment_id(comment_id)
     if request.method == "POST":
-        question_id = data_manager.get_id_question_by_id_comment(comment_id)
         data_manager.edit_comment(comment_id, request.form.get("message"))
         return redirect(
             url_for(
@@ -282,13 +285,13 @@ def delete_comment(comment_id):
 @app.route("/question/<question_id>/new-tag", methods=["GET", "POST"])
 def add_question_tag(question_id):
     if request.method == "POST":
-        tag = request.form.get("tag")
-        if tag == "":
-            tag = request.form.get("name")
+        tag = request.form.get("tag", request.form.get("name"))
         tag_id = data_manager.get_tag_id(tag)
+
         if tag_id is None:
             data_manager.add_new_tag(tag)
             tag_id = data_manager.get_tag_id(tag)
+
         data_manager.add_question_tag(question_id, dict(tag_id)["id"])
         return redirect(
             url_for(
@@ -296,8 +299,11 @@ def add_question_tag(question_id):
                 question_id=question_id,
             )
         )
+        
     return render_template(
-        "add_tag.html", question_id=question_id, tags=data_manager.get_tags()
+        "add_tag.html",
+        question_id=question_id,
+        tags=data_manager.get_tags(),
     )
 
 
