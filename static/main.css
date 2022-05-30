@@ -8,6 +8,7 @@ button {
     font-family: Book Antiqua, sans-serif;
     cursor: pointer;
     transition-duration: 0.4s;
+
 }
 
 .button_btn:hover {
@@ -21,4 +22,26 @@ body {
 
 a {
     color: #806000;
+}
+
+label, input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.home-link {
+    display: block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.home-link:hover {
+    text-decoration: underline;
+}
+
+div {
+    text-align: center;
 }

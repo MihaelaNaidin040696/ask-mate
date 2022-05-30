@@ -1,9 +1,15 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, session
+
 import data_manager
 import os
+import re
+import hash_pass
 from bonus_questions import SAMPLE_QUESTIONS
 
+
 app = Flask(__name__)
+app.secret_key = "_5#y2LF4Q8z\xec]/"
+
 
 UPLOAD_FOLDER = (
     os.getenv("UPLOAD_FOLDER") if "UPLOAD_FOLDER" in os.environ else "images"
@@ -322,6 +328,64 @@ def delete_question_tag(question_id, tag_id):
             question_id=question_id,
         )
     )
+
+
+@app.route("/registration", methods=['GET', 'POST'])
+def register():
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        user_credentials = data_manager.select_user(username)
+        if not username or not password or not email:
+            msg = 'Please fill out the form!'
+        elif user_credentials:
+            msg = 'Account already exists!'
+        elif re.match(r"^[A-Za-z\d]$", username):
+            msg = 'Username must contain only characters and numbers!'
+        else:
+            password = hash_pass.hash_password(password)
+            data_manager.insert_user_credentials(username, email, password)
+            msg = 'You have successfully registered!'
+    elif request.method == 'POST':
+        msg = 'Please fill out the form!'
+    return render_template(
+        "registration.html", msg = msg
+    )
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    msg = ''
+    if request.method == 'POST' \
+            and 'username' in request.form \
+            and 'password' in request.form \
+            and hash_pass.verify_password(request.form['password'],
+                                          dict(data_manager.select_user(request.form['username']))['password']):
+        user_credentials = data_manager.select_user(request.form['username'])
+        if user_credentials:
+            session['loggedin'] = True
+            session['id'] = user_credentials['user_id']
+            session['username'] = user_credentials['username']
+            msg = 'Logged in successfully!'
+            latest_questions = data_manager.get_latest_questions()
+            return render_template('latest_questions.html', questions=latest_questions)
+        else:
+            msg = 'Incorrect username/password!'
+    return render_template('login.html', msg=msg)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+
+
+
 
 
 if __name__ == "__main__":
