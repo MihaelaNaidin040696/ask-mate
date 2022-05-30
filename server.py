@@ -347,11 +347,12 @@ def register():
         else:
             password = hash_pass.hash_password(password)
             data_manager.insert_user_credentials(username, email, password)
-            msg = 'You have successfully registered!'
+            latest_questions = data_manager.get_latest_questions()
+            return render_template('latest_questions.html', questions=latest_questions)
     elif request.method == 'POST':
         msg = 'Please fill out the form!'
     return render_template(
-        "registration.html", msg = msg
+        "registration.html", msg=msg
     )
 
 
