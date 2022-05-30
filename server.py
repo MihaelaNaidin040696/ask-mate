@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, url_for, redirect
 import data_manager
 import os
 import re
+
+import hash_pass
 from bonus_questions import SAMPLE_QUESTIONS
 
 app = Flask(__name__)
@@ -340,6 +342,7 @@ def register():
         elif re.match(r"^[A-Za-z\d]$", username):
             msg = 'Username must contain only characters and numbers!'
         else:
+            password = hash_pass.hash_password(password)
             data_manager.insert_user_credentials(username, email, password)
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
