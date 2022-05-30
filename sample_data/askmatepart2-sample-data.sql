@@ -121,3 +121,10 @@ SELECT pg_catalog.setval('tag_id_seq', 3, true);
 INSERT INTO question_tag VALUES (0, 1);
 INSERT INTO question_tag VALUES (1, 3);
 INSERT INTO question_tag VALUES (2, 3);
+
+CREATE TABLE IF NOT EXISTS user_registration (
+        user_id serial NOT NULL,
+        submision_time timestamp without time zone,
+        username varchar(50) NOT NULL,
+        email varchar(100) NOT NULL,
+        password varchar(255) NOT NULL);
