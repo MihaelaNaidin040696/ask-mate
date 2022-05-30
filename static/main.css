@@ -1,0 +1,24 @@
+button {
+    border: 1px solid;
+    background-color: #9fdf9f;
+    padding: 8px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 12px;
+    font-family: Book Antiqua, sans-serif;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.button_btn:hover {
+    background-color: #206020;
+}
+
+body {
+    font-family: Book Antiqua, sans-serif;
+    background-image: url("https://cdn.wallpapersafari.com/33/23/x2tFaK.jpg");
+}
+
+a {
+    color: #806000;
+}

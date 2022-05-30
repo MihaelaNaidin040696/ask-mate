@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Add a comment{% endblock title %}
+{% block content %}
+<form
+    method="POST"
+    action="{{ url_for('add_answer_comment', answer_id=answer_id)}}"
+    enctype="multipart/form-data"
+>
+    <label class="form-label mt-3" for="message">Message</label><br />
+    <textarea
+        id="message"
+        class="form-control"
+        rows="4"
+        cols="40"
+        name="message"
+        required
+    ></textarea>
+    <button class="button_btn" type="submit">Add comment</button>
+</form>
+{% endblock %}
