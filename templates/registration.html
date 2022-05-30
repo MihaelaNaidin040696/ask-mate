@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+    <h2> Registration Page</h2>
+<form
+    method="POST"
+    action="{{ url_for('register') }}"
+    enctype="multipart/form-data"
+>
+    <div class="msg">{{ msg }}</div>
+        <input id="username" name="username" type="text" placeholder="Enter Your Username" class="textbox"/></br></br>
+        <input id="password" name="password" type="password" placeholder="Enter Your Password" class="textbox"/></br></br>
+        <input id="email" name="email" type="email" placeholder="Enter Your Email" class="textbox"/></br></br>
+        <button class="button_btn" type="submit">Sign in</button>
+
+</form>
+{% endblock %}

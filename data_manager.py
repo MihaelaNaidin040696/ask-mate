@@ -1,3 +1,4 @@
+from psycopg2._psycopg import cursor
 from psycopg2.extras import RealDictCursor
 import database_common
 
@@ -338,3 +339,23 @@ def get_latest_questions(cursor):
         "SELECT submission_time, title, message FROM question ORDER BY submission_time LIMIT 5;"
     )
     return cursor.fetchall()
+
+
+@database_common.connection_handler
+def select_user(cursor, username):
+    cursor.execute(
+        "SELECT * FROM user_registration "
+        "WHERE username ILIKE %(username)s;",
+        {"username": f"%{username}%"}
+    )
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
+def insert_user_credentials(cursor, username, email, password):
+    cursor.execute(
+        "INSERT INTO user_registration (submission_time, username, email, password)"
+        "VALUES (now()::timestamp(0), %(username)s, %(email)s, %(password)s);",
+        {'username': username, 'email': email, 'password': password}
+    )
+

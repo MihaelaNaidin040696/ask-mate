@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect
 import data_manager
 import os
+import re
 from bonus_questions import SAMPLE_QUESTIONS
 
 app = Flask(__name__)
@@ -322,6 +323,33 @@ def delete_question_tag(question_id, tag_id):
             question_id=question_id,
         )
     )
+
+
+@app.route("/registration", methods=['GET', 'POST'])
+def register():
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        user_credentials = data_manager.select_user(username)
+        if not username or not password or not email:
+            msg = 'Please fill out the form!'
+        elif user_credentials:
+            msg = 'Account already exists!'
+        elif re.match(r"^[A-Za-z\d]$", username):
+            msg = 'Username must contain only characters and numbers!'
+        else:
+            data_manager.insert_user_credentials(username, email, password)
+            msg = 'You have successfully registered!'
+    elif request.method == 'POST':
+        msg = 'Please fill out the form!'
+    return render_template(
+        "registration.html", msg = msg
+    )
+
+
+
 
 
 if __name__ == "__main__":
