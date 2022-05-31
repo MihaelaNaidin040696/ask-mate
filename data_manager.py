@@ -360,3 +360,28 @@ def insert_user_credentials(cursor, username, email, password):
     )
 
 
+@database_common.connection_handler
+def insert_user_id_in_questions(cursor, user_id):
+    cursor.execute(
+        "INSERT INTO question (user_id)"
+        "VALUES (%(user_id)s);",
+        {'user_id': user_id}
+    )
+
+
+@database_common.connection_handler
+def insert_user_id_in_answer(cursor, user_id):
+    cursor.execute(
+        "INSERT INTO answer (user_id)"
+        "VALUES (%(user_id)s);",
+        {'user_id': user_id}
+    )
+
+
+@database_common.connection_handler
+def insert_user_id_in_comments(cursor, user_id):
+    cursor.execute(
+        "INSERT INTO comment (user_id)"
+        "VALUES (%(user_id)s);",
+        {'user_id': user_id}
+    )

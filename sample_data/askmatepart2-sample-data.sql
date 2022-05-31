@@ -128,3 +128,7 @@ CREATE TABLE IF NOT EXISTS user_registration (
         username varchar(50) NOT NULL,
         email varchar(100) NOT NULL,
         password varchar(255) NOT NULL);
+
+ALTER TABLE question ADD user_id integer NULL;
+ALTER TABLE answer ADD user_id integer NULL;
+ALTER TABLE comment ADD user_id integer NULL;
