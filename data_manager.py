@@ -157,19 +157,19 @@ def vote_item(cursor, table, id, modifier):
 
 
 def vote_up_question(id):
-    vote_item(id, "question", 1)
+    vote_item("question", id, 1)
 
 
 def vote_down_question(id):
-    vote_item(id, "question", -1)
+    vote_item("question", id, -1)
 
 
 def vote_up_answer(id):
-    vote_item(id, "answer", 1)
+    vote_item("answer", id, 1)
 
 
 def vote_down_answer(id):
-    vote_item(id, "answer", -1)
+    vote_item("answer", id, -1)
 
 
 @database_common.connection_handler
@@ -398,4 +398,36 @@ def get_user_details_without_id(cursor):
         "SELECT username, submission_time "
         "FROM user_registration;"
     )
+    return cursor.fetchone()
+
+
+def get_user_details_with_id(cursor):
+    cursor.execute(
+        "SELECT user_id, submission_time, username "
+        "FROM user_registration"
+    )
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
+def get_questions_by_user_id(cursor, user_id):
+    cursor.execute("SELECT * FROM question "
+                   "WHERE  user_id = %(user_id)s ",
+                    {'user_id': user_id})
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_answers_by_user_id(cursor, user_id):
+    cursor.execute("SELECT * FROM answer "
+                   "WHERE  user_id = %(user_id)s ",
+                    {'user_id': user_id})
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_comments_by_user_id(cursor, user_id):
+    cursor.execute("SELECT * FROM comment "
+                   "WHERE  user_id = %(user_id)s ",
+                    {'user_id': user_id})
     return cursor.fetchall()
