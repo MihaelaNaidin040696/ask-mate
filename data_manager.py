@@ -73,57 +73,63 @@ def sort_questions(cursor, criteria, direction):
 
 
 @database_common.connection_handler
-def write_question(cursor, title, message, image):
+def write_question(cursor, title, message, image, user_id):
     cursor.execute(
         """
-            INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-            VALUES (now()::timestamp(0), 0, 0, %(title)s, %(message)s, %(image)s) RETURNING id;
+            INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
+            VALUES (now()::timestamp(0), 0, 0, %(title)s, %(message)s, %(image)s, %(user_id)s) RETURNING id;
         """,
         {
             "title": title,
             "message": message,
             "image": image,
+            "user_id": user_id,
         },
     )
     return cursor.fetchone()
 
 
 @database_common.connection_handler
-def write_answer(cursor, question_id, message, image):
+def write_answer(cursor, question_id, message, image, user_id):
     cursor.execute(
         """
-            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-            VALUES (now()::timestamp(0), 0, %(question_id)s, %(message)s, %(image)s);
+            INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+            VALUES (now()::timestamp(0), 0, %(question_id)s, %(message)s, %(image)s, %(user_id)s);
         """,
         {
             "question_id": question_id,
             "message": message,
             "image": image,
+            "user_id": user_id,
         },
     )
 
 
 @database_common.connection_handler
-def delete_question(cursor, id):
+def delete_question(cursor, id, user_id):
     cursor.execute(
         """
             DELETE FROM comment WHERE question_id = %(id)s;
             DELETE FROM answer WHERE question_id = %(id)s;
             DELETE FROM question_tag WHERE question_id = %(id)s;
             DELETE FROM question WHERE id = %(id)s;
+            DELETE FROM question WHERE user_id = %(user_id)s;
         """,
-        {"id": id},
+        {"id": id,
+         "user_id": user_id},
     )
 
 
 @database_common.connection_handler
-def delete_answer(cursor, id):
+def delete_answer(cursor, id, user_id):
     cursor.execute(
         """
             DELETE FROM comment WHERE answer_id = %(id)s;
             DELETE FROM answer WHERE id = %(id)s;
+            DELETE FROM answer WHERE user_id = %(user_id)s;
         """,
-        {"id": id},
+        {"id": id,
+         "user_id": user_id},
     )
 
 
@@ -182,29 +188,31 @@ def get_comments(cursor):
 
 
 @database_common.connection_handler
-def add_question_comment(cursor, id, message):
+def add_question_comment(cursor, id, message, user_id):
     cursor.execute(
         """
-            INSERT INTO comment (question_id, message, submission_time, edited_count)
-            VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);
+            INSERT INTO comment (question_id, message, submission_time, edited_count, user_id)
+            VALUES (%(id)s, %(message)s, now()::timestamp(0), 0, %(user_id)s);
         """,
         {
             "id": id,
             "message": message,
+            "user_id": user_id,
         },
     )
 
 
 @database_common.connection_handler
-def add_answer_comment(cursor, id, message):
+def add_answer_comment(cursor, id, message, user_id):
     cursor.execute(
         """
-            INSERT INTO comment (answer_id, message, submission_time, edited_count)
-            VALUES (%(id)s, %(message)s, now()::timestamp(0), 0);
+            INSERT INTO comment (answer_id, message, submission_time, edited_count, user_id)
+            VALUES (%(id)s, %(message)s, now()::timestamp(0), 0, %(user_id)s);
         """,
         {
             "id": id,
             "message": message,
+            "user_id": user_id,
         },
     )
 
@@ -288,7 +296,7 @@ def add_new_tag(cursor, name):
 @database_common.connection_handler
 def delete_comment(cursor, id):
     cursor.execute(
-        "DELETE FROM comment WHERE id = %(id)s;",
+        "DELETE * FROM comment WHERE id = %(id)s;",
         {"id": id},
     )
 
@@ -357,31 +365,4 @@ def insert_user_credentials(cursor, username, email, password):
         "INSERT INTO user_registration (submission_time, username, email, password)"
         "VALUES (now()::timestamp(0), %(username)s, %(email)s, %(password)s);",
         {'username': username, 'email': email, 'password': password}
-    )
-
-
-@database_common.connection_handler
-def insert_user_id_in_questions(cursor, user_id):
-    cursor.execute(
-        "INSERT INTO question (user_id)"
-        "VALUES (%(user_id)s);",
-        {'user_id': user_id}
-    )
-
-
-@database_common.connection_handler
-def insert_user_id_in_answer(cursor, user_id):
-    cursor.execute(
-        "INSERT INTO answer (user_id)"
-        "VALUES (%(user_id)s);",
-        {'user_id': user_id}
-    )
-
-
-@database_common.connection_handler
-def insert_user_id_in_comments(cursor, user_id):
-    cursor.execute(
-        "INSERT INTO comment (user_id)"
-        "VALUES (%(user_id)s);",
-        {'user_id': user_id}
     )

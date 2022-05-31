@@ -95,7 +95,7 @@ def add_new_question():
         qid = data_manager.write_question(
             request.form.get("title").capitalize(),
             request.form.get("message").capitalize(),
-            image,
+            image,session['id']
         )
 
         return redirect(
@@ -115,6 +115,7 @@ def add_new_answer(question_id):
             question_id,
             request.form.get("message").capitalize(),
             image,
+            session['id'],
         )
         return redirect(
             url_for(
@@ -130,7 +131,7 @@ def add_new_answer(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
 def delete_questions(question_id):
-    data_manager.delete_question(question_id)
+    data_manager.delete_question(question_id, session['id'])
     return redirect(
         url_for(
             "display_questions",
@@ -142,7 +143,7 @@ def delete_questions(question_id):
 @app.route("/answer/<answer_id>/delete", methods=["GET", "POST"])
 def delete_answers(answer_id):
     question_id = data_manager.get_answers_by_answer_id(answer_id)["question_id"]
-    data_manager.delete_answer(answer_id)
+    data_manager.delete_answer(answer_id, session['id'])
     return redirect(
         url_for(
             "display_question_by_id",
@@ -211,7 +212,7 @@ def vote_down_answer(answer_id):
 @app.route("/question/<question_id>/new-comment", methods=["GET", "POST"])
 def add_question_comment(question_id):
     if request.method == "POST":
-        data_manager.add_question_comment(question_id, request.form.get("message"))
+        data_manager.add_question_comment(question_id, request.form.get("message"), session['id'])
         return redirect(
             url_for(
                 "display_question_by_id",
@@ -228,7 +229,7 @@ def add_question_comment(question_id):
 def add_answer_comment(answer_id):
     question_id = data_manager.get_id_question_by_id_answer(answer_id)
     if request.method == "POST":
-        data_manager.add_answer_comment(answer_id, request.form.get("message"))
+        data_manager.add_answer_comment(answer_id, request.form.get("message"), session['id'])
         return redirect(
             url_for(
                 "display_question_by_id",
