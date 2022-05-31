@@ -368,7 +368,6 @@ def login():
             session['loggedin'] = True
             session['id'] = user_credentials['user_id']
             session['username'] = user_credentials['username']
-            msg = 'Logged in successfully!'
             latest_questions = data_manager.get_latest_questions()
             return render_template('latest_questions.html', questions=latest_questions)
         else:

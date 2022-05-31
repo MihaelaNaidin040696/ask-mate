@@ -45,3 +45,8 @@ label, input {
 div {
     text-align: center;
 }
+
+.navbar-nav{
+    float:right;
+}
+
