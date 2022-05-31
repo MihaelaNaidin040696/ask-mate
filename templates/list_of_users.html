@@ -19,9 +19,9 @@
             <tr>
                 <td>
                     <a
-                    href="#"
+                    href="{{ url_for('user_page', user_id=session['id']) }}"
                     >{{ user.username }}</a
-                    > <!-- to add link to user page route -->
+                    >
                 </td>
                 <td>{{ user.submission_time }}</td>
                 <td>{{ number_of_questions['count'] }}</td>

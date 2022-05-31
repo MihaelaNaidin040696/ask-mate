@@ -401,6 +401,7 @@ def get_user_details_without_id(cursor):
     return cursor.fetchone()
 
 
+@database_common.connection_handler
 def get_user_details_with_id(cursor):
     cursor.execute(
         "SELECT user_id, submission_time, username "
