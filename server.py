@@ -385,6 +385,10 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/users')
+def list_users():
+    list_of_users = data_manager.get_list_of_users()
+    return render_template('list_of_users.html', users=list_of_users)
 
 
 
