@@ -367,6 +367,7 @@ def insert_user_credentials(cursor, username, email, password):
         {'username': username, 'email': email, 'password': password}
     )
 
+
 @database_common.connection_handler
 def get_number_of_questions_by_user_id(cursor, user_id):
     cursor.execute("SELECT COUNT(user_id) "
@@ -391,3 +392,10 @@ def get_number_of_comments_by_user_id(cursor, user_id):
     return cursor.fetchone()
 
 
+@database_common.connection_handler
+def get_user_details_without_id(cursor):
+    cursor.execute(
+        "SELECT username, submission_time "
+        "FROM user_registration;"
+    )
+    return cursor.fetchall()

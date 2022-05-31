@@ -7,9 +7,11 @@
     <button class="button_btn" type="submit">Latest questions</button>
 </form>
 
+    {% if 'username' in session %}
 <form class="d-inline" action="{{ url_for('list_users') }}">
     <button class="button_btn" type="submit">Users list</button>
 </form>
+    {% endif %}
 
 <form action="/list">
     <select
