@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Question list{% endblock title %}
+
+{% block content %}
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Registration date</th>
+            <th>Number of asked questions</th>
+            <th>Number of answers</th>
+            <th>Number of comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    <a
+                    href="#"
+                    >{{ user.Username }}</a
+                    > <!-- to add link to user page route -->
+                </td>
+                <td>{{ user.Registration_date }}</td>
+                <td>{{ user.Number_of_asked_questions }}</td>
+                <td>{{ user.Number_of_answers }}</td>
+                <td>{{ user.Number_of_comments }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
