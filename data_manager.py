@@ -366,3 +366,28 @@ def insert_user_credentials(cursor, username, email, password):
         "VALUES (now()::timestamp(0), %(username)s, %(email)s, %(password)s);",
         {'username': username, 'email': email, 'password': password}
     )
+
+@database_common.connection_handler
+def get_number_of_questions_by_user_id(cursor, user_id):
+    cursor.execute("SELECT COUNT(user_id) "
+                   "FROM question ",
+                    {"user_id": user_id})
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
+def get_number_of_answers_by_user_id(cursor, user_id):
+    cursor.execute("SELECT COUNT(user_id) "
+                   "FROM answer ",
+                    {"user_id": user_id})
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
+def get_number_of_comments_by_user_id(cursor, user_id):
+    cursor.execute("SELECT COUNT(user_id) "
+                   "FROM comment ",
+                    {"user_id": user_id})
+    return cursor.fetchone()
+
+
