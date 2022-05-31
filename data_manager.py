@@ -253,7 +253,10 @@ def edit_answer(cursor, id, message):
 @database_common.connection_handler
 def edit_comment(cursor, id, message):
     cursor.execute(
-        "UPDATE comment SET message = %(message)s, submission_time = now()::timestamp(0), edited_count = edited_count + 1 WHERE id = %(id)s;",
+        "UPDATE comment SET message = %(message)s, "
+        "submission_time = now()::timestamp(0), "
+        "edited_count = edited_count + 1 "
+        "WHERE id = %(id)s;",
         {
             "id": id,
             "message": message,
@@ -401,6 +404,7 @@ def get_user_details_without_id(cursor):
     return cursor.fetchone()
 
 
+@database_common.connection_handler
 def get_user_details_with_id(cursor):
     cursor.execute(
         "SELECT user_id, submission_time, username "
