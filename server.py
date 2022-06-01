@@ -6,10 +6,8 @@ import re
 import hash_pass
 from bonus_questions import SAMPLE_QUESTIONS
 
-
 app = Flask(__name__)
 app.secret_key = "_5#y2LF4Q8z\xec]/"
-
 
 UPLOAD_FOLDER = (
     os.getenv("UPLOAD_FOLDER") if "UPLOAD_FOLDER" in os.environ else "images"
@@ -311,7 +309,7 @@ def add_question_tag(question_id):
                 question_id=question_id,
             )
         )
-        
+
     return render_template(
         "add_tag.html",
         question_id=question_id,
@@ -384,9 +382,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-
-
-
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,
+            port=5002)

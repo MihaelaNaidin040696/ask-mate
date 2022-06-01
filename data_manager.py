@@ -1,5 +1,5 @@
 from psycopg2._psycopg import cursor
-# from psycopg2.extras import RealDictCursor
+from psycopg2.extras import RealDictCursor
 import database_common
 
 
@@ -358,7 +358,6 @@ def insert_user_credentials(cursor, username, email, password):
         "VALUES (now()::timestamp(0), %(username)s, %(email)s, %(password)s);",
         {'username': username, 'email': email, 'password': password}
     )
-
 
 @database_common.connection_handler
 def insert_user_id_in_questions(cursor, user_id):
