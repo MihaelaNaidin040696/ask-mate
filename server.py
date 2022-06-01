@@ -396,7 +396,7 @@ def list_users():
 
 @app.route('/user/<user_id>')
 def user_page(user_id):
-    user_details = data_manager.get_user_details_with_id()
+    user_details = data_manager.get_user_details_with_id(user_id)
     questions_of_user = data_manager.get_questions_by_user_id(user_id)
     answers_of_user = data_manager.get_answers_by_user_id(user_id)
     comments_of_user = data_manager.get_comments_by_user_id(user_id)

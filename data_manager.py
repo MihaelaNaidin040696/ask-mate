@@ -403,7 +403,7 @@ def get_user_details_without_id(cursor):
 
 
 @database_common.connection_handler
-def get_user_details_with_id(cursor):
+def get_user_details_with_id(cursor, user_id):
     cursor.execute("SELECT user_registration.user_id, "
                    "username, "
                    "user_registration.submission_time, "
@@ -417,7 +417,9 @@ def get_user_details_with_id(cursor):
                    "ON user_registration.user_id = answer.user_id "
                    "LEFT JOIN comment "
                    "ON user_registration.user_id = comment.user_id "
-                   "GROUP BY user_registration.username, user_registration.submission_time, user_registration.user_id;"
+                   "WHERE user_registration.user_id = %(user_id)s "
+                   "GROUP BY user_registration.username, user_registration.submission_time, user_registration.user_id;",
+                   {'user_id': user_id}
                    )
     return cursor.fetchone()
 
