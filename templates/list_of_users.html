@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Users list{% endblock title %}
+
+{% block content %}
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Registration date</th>
+            <th>Number of asked questions</th>
+            <th>Number of answers</th>
+            <th>Number of comments</th>
+            <th>Reputation</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    <a
+                    href="{{ url_for('user_page', user_id=session['id']) }}"
+                    >{{ user.username }}</a
+                    >
+                </td>
+                <td>{{ user.submission_time }}</td>
+                <td>{{ user.number_of_questions }}</td>
+                <td>{{ user.number_of_answers }}</td>
+                <td>{{ user.number_of_comments }}</td>
+                <td>{{ user.reputation }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
