@@ -383,7 +383,8 @@ def insert_user_credentials(cursor, username, email, password):
 @database_common.connection_handler
 def get_user_details_without_id(cursor):
     cursor.execute(
-        "SELECT DISTINCT username, "
+        "SELECT DISTINCT username,"
+        "reputation, "
         "user_registration.submission_time, "
         "COUNT(DISTINCT question.id) as number_of_questions, "
         "COUNT(DISTINCT answer.id) as number_of_answers, "
@@ -395,7 +396,7 @@ def get_user_details_without_id(cursor):
         "ON user_registration.user_id = answer.user_id "
         "LEFT JOIN comment "
         "ON user_registration.user_id = comment.user_id "
-        "GROUP BY user_registration.username, user_registration.submission_time;"
+        "GROUP BY user_registration.username, user_registration.submission_time, user_registration.reputation;"
     )
     return cursor.fetchall()
 
@@ -403,7 +404,8 @@ def get_user_details_without_id(cursor):
 @database_common.connection_handler
 def get_user_details_with_id(cursor, user_id):
     cursor.execute("SELECT user_registration.user_id, "
-                   "username, "
+                   "username,"
+                   "reputation, "
                    "user_registration.submission_time, "
                    "COUNT(DISTINCT question.id) as number_of_questions, "
                    "COUNT(DISTINCT answer.id) as number_of_answers, "
@@ -416,7 +418,8 @@ def get_user_details_with_id(cursor, user_id):
                    "LEFT JOIN comment "
                    "ON user_registration.user_id = comment.user_id "
                    "WHERE user_registration.user_id = %(user_id)s "
-                   "GROUP BY user_registration.username, user_registration.submission_time, user_registration.user_id;",
+                   "GROUP BY user_registration.username, user_registration.submission_time, user_registration.user_id,"
+                   "user_registration.reputation;",
                    {'user_id': user_id}
                    )
     return cursor.fetchone()

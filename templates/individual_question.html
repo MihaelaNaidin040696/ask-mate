@@ -88,11 +88,11 @@
 
 <h2>ANSWERS</h2>
 <div class="d-grid gap-2 d-md-block">
-    <a
+    <p><a
         href="{{ url_for('add_new_answer', question_id=question_id)}}"
         class="button_btn"
-        >Post an answer</a
-    >
+        >Here</a
+    > you can post an answer</p>
 </div>
 <br />
     {% if question.user_id == session['id']  %}
@@ -104,7 +104,6 @@
         <p class="card-link">
             <img
                 src="{{ url_for('static', filename='images/' + question_image) }}"
-                style="width: 100px; height: 100px"
                 alt="No image found"
             />
         </p>
@@ -112,11 +111,6 @@
         <h5 class="card-title">{{ answer.submission_time }}</h5>
         <p class="card-text">{{ answer.message }}</p>
         <p class="card-link">{{ answer.vote_number }}</p>
-        <a href="{{ url_for('edit_answer', answer_id=answer.id)}}">
-            Edit answer</a
-        >
-        <br /><br />
-
         <div class="d-flex">
             <form
                 class="d-inline"
@@ -134,9 +128,15 @@
             <form
                     action="{{ url_for('get_accepted_answer', question_id=question.id, answer_id=answer.id) }}"
                     class="d-inline ml-1">
-                <button>accept answer</button>
+                <button>Accept answer</button>
             </form>
             {% endif %}
+            <form
+                class="col-md-8 text-right"
+                action="{{ url_for('edit_answer', answer_id=answer.id)}}"
+            >
+                <button class="button_btn" type="submit">Edit answer</button>
+            </form>
             <form
                 class="d-inline ml-auto"
                 action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
@@ -176,7 +176,6 @@
         <p class="card-link">
             <img
                 src="{{ url_for('static', filename='images/' + question_image) }}"
-                style="width: 100px; height: 100px"
                 alt="No image found"
             />
         </p>
@@ -185,9 +184,12 @@
         <p class="card-text">{{ answer.message }}</p>
         <p class="card-link">{{ answer.vote_number }}</p>
     {% if answer.user_id == session.id %}
-        <a href="{{ url_for('edit_answer', answer_id=answer.id)}}">
-            Edit answer</a
+        <form
+            class="d-inline"
+            action="{{ url_for('edit_answer', answer_id=answer.id)}}"
         >
+            <button class="button_btn" type="submit">Edit answer</button>
+        </form>
         {% endif %}
         <br /><br />
 

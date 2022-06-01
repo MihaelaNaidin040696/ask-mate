@@ -1,6 +1,6 @@
 button {
     border: 1px solid;
-    background-color: #9fdf9f;
+    background-color: #ffcc66;
     padding: 8px 20px;
     text-align: center;
     display: inline-block;
@@ -8,11 +8,12 @@ button {
     font-family: Book Antiqua, sans-serif;
     cursor: pointer;
     transition-duration: 0.4s;
+    border-radius: 50px;
 
 }
 
 .button_btn:hover {
-    background-color: #206020;
+    background-color: #cc8800;
 }
 
 body {
