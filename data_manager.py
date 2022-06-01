@@ -435,3 +435,14 @@ def get_comments_by_user_id(cursor, user_id):
                    "WHERE  user_id = %(user_id)s ",
                     {'user_id': user_id})
     return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_tags(cursor):
+    cursor.execute("SELECT tag.name AS Tags, "
+                   "COUNT(question_tag.question_id) as Number_of_questions "
+                   "FROM tag "
+                   "INNER JOIN question_tag "
+                   "ON tag.id=question_tag.tag_id "
+                   "GROUP BY tag.name;")
+    return cursor.fetchall()

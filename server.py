@@ -400,7 +400,7 @@ def list_users():
 
 @app.route('/user/<user_id>')
 def user_page(user_id):
-    user_details= data_manager.get_user_details_with_id()
+    user_details = data_manager.get_user_details_with_id()
     number_of_questions = data_manager.get_number_of_questions_by_user_id(user_id)
     number_of_answers = data_manager.get_number_of_answers_by_user_id(user_id)
     number_of_comments = data_manager.get_number_of_comments_by_user_id(user_id)
@@ -415,6 +415,11 @@ def user_page(user_id):
                            answers_of_user=answers_of_user,
                            comments_of_user=comments_of_user,)
 
+
+@app.route('/tags')
+def list_tags():
+    tags = data_manager.get_tags()
+    return render_template('list_of_tags.html', tags=tags)
 
 
 if __name__ == "__main__":
