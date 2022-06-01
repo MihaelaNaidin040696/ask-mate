@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Tags list{% endblock title %}
+
+{% block content %}
+
+    <ul>
+    {% for tag in tags %}
+        {% if tag.number_of_questions > 1 %}
+        <li>{{ tag.tags }} in {{ tag.number_of_questions }} questions</li>
+        {% else %}
+        <li>{{ tag.tags }} in {{ tag.number_of_questions }} question</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+
+{% endblock %}
