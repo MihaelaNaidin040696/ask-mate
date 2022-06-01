@@ -60,8 +60,13 @@ def search_list():
     all_questions=data_manager.get_questions()
     criteria, direction, search = get_request_data()
     dates_question = data_manager.get_data_for_search_question(search)
+    print(11)
+    print(all_questions)
+    print(22)
     print(dates_question)
     dates_answer = data_manager.get_data_for_search_answer(search)
+    print(33)
+    print(dates_answer)
     sorted_questions = data_manager.sort_questions(criteria, direction)
     only_questions_without_answers = data_manager.get_data_for_search_answer_and_question()
     for ids in only_questions_without_answers:
@@ -267,7 +272,7 @@ def edit_answer(answer_id):
     answer = data_manager.get_answers_by_answer_id(answer_id)
     if request.method == "POST":
         question_id = data_manager.get_id_question_by_id_answer(answer_id)
-        message = request.form.get("message")
+        message = request.form.get("message").upper()
         data_manager.edit_answer(answer_id, message)
         return redirect(
             url_for(
@@ -439,4 +444,4 @@ def get_accepted_answer(question_id, answer_id):
 
 if __name__ == "__main__":
     app.run(debug=True,
-            port=5002)
+            port=5000)

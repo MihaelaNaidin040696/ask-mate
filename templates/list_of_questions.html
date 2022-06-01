@@ -157,10 +157,73 @@
         {% if date  %}
 
 
-                {% for question in dates%}
 
 
 
+  {% for answer in date %}
+                {% for quest in all_questions %}
+                        {% if quest.id == answer.question_id %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{answer.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td>{{answer.image |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td></td>
+            <tr>
+
+
+
+                <tr>
+            <td>{{ quest.id }}</td>
+            <td>{{ quest.submission_time  }}</td>
+            <td>{{ quest.view_number }}</td>
+            <td>{{ quest.vote_number }}</td>
+                <td>
+                <a
+                    href="{{ url_for('display_question_by_id', question_id=quest.id) }}"
+                    >{{ quest.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                >
+            </td>
+            <td>{{ quest.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+
+            <td>
+                {% if quest.image %}
+                <img
+                    src="{{ url_for('static', filename='images/' + quest.image) }}"
+                    alt="No image found"
+                />
+                {% endif %}
+            </td>
+            <td>
+                <form
+                    action="{{ url_for('vote_up_question', question_id=quest.id)}}"
+                >
+                    <button class="button_btn" type="submit">
+                        Vote up
+                    </button>
+                </form>
+                <form
+                    action="{{ url_for('vote_down_question', question_id=quest.id)}}"
+                >
+                    <button class="button_btn" type="submit">
+                        Vote down
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+
+
+                {% endif%}
+            {% endfor %}
+
+            {% endfor %}
+
+ {% for question in dates%}
+                {% if question.id not in simple_data%}
 
                 <tr>
             <td>{{ question.id }}</td>
@@ -200,14 +263,12 @@
                 </form>
             </td>
         </tr>
-
-
-
+{%endif%}
 
 {% endfor %}
+{%endif%}
+{%endif%}
 
-{% endif%}
-{% endif%}
 
 {% if not dates %}
             {% if date %}
@@ -215,6 +276,16 @@
                 {% for answer in date %}
                 {% for quest in all_questions %}
                         {% if quest.id == answer.question_id %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{answer.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td>{{answer.image |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td></td>
+            <tr>
 
 
 

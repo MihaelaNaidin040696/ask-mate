@@ -11,7 +11,7 @@ def get_headers(cursor):
 
 @database_common.connection_handler
 def get_questions(cursor):
-    cursor.execute("SELECT * FROM question ORDER BY submission_time;")
+    cursor.execute("SELECT * FROM question ;")
     return cursor.fetchall()
 
 
