@@ -367,8 +367,8 @@ def get_latest_questions(cursor):
 def select_user(cursor, username):
     cursor.execute(
         "SELECT * FROM user_registration "
-        "WHERE username ILIKE %(username)s;",
-        {"username": f"%{username}%"}
+        "WHERE username = %(username)s;",
+        {"username": username}
     )
     return cursor.fetchone()
 
