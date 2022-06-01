@@ -13,6 +13,10 @@
 </form>
     {% endif %}
 
+<form class="d-inline" action="{{ url_for('list_tags') }}">
+    <button class="button_btn" type="submit">Tags list</button>
+</form><br><br>
+
 <form action="/list">
     <select
         class="form-select form-select-lg mb-3"
