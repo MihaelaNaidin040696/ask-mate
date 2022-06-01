@@ -156,7 +156,6 @@ def view_number(cursor, id):
                    )
 
 
-
 @database_common.connection_handler
 def vote_item(cursor, table, id, modifier):
     cursor.execute(
@@ -410,10 +409,21 @@ def get_number_of_comments_by_user_id(cursor, user_id):
 @database_common.connection_handler
 def get_user_details_without_id(cursor):
     cursor.execute(
-        "SELECT username, submission_time "
-        "FROM user_registration;"
+        "SELECT DISTINCT username, "
+        "user_registration.submission_time, "
+        "COUNT(DISTINCT question.id) as number_of_questions, "
+        "COUNT(DISTINCT answer.id) as number_of_answers, "
+        "COUNT(DISTINCT comment.id) as number_of_comments "
+        "FROM user_registration "
+        "LEFT JOIN question "
+        "ON user_registration.user_id = question.user_id "
+        "LEFT JOIN answer "
+        "ON user_registration.user_id = answer.user_id "
+        "LEFT JOIN comment "
+        "ON user_registration.user_id = comment.user_id "
+        "GROUP BY user_registration.username, user_registration.submission_time;"
     )
-    return cursor.fetchone()
+    return cursor.fetchall()
 
 
 @database_common.connection_handler

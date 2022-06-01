@@ -24,9 +24,9 @@
                     >
                 </td>
                 <td>{{ user.submission_time }}</td>
-                <td>{{ number_of_questions['count'] }}</td>
-                <td>{{ number_of_answers['count'] }}</td>
-                <td>{{ number_of_comments['count'] }}</td>
+                <td>{{ user.number_of_questions }}</td>
+                <td>{{ user.number_of_answers }}</td>
+                <td>{{ user.number_of_comments }}</td>
             </tr>
         {% endfor %}
     </tbody>

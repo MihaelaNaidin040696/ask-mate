@@ -389,15 +389,9 @@ def logout():
 
 @app.route('/users')
 def list_users():
-    list_of_users = data_manager.get_user_details_without_id()
-    number_of_questions = data_manager.get_number_of_questions_by_user_id(session['id'])
-    number_of_answers = data_manager.get_number_of_answers_by_user_id(session['id'])
-    number_of_comments = data_manager.get_number_of_comments_by_user_id(session['id'])
+    users = data_manager.get_user_details_without_id()
     return render_template('list_of_users.html',
-                           users=list_of_users,
-                           number_of_questions=number_of_questions,
-                           number_of_answers=number_of_answers,
-                           number_of_comments=number_of_comments,)
+                           users=users,)
 
 
 @app.route('/user/<user_id>')

@@ -5,14 +5,12 @@
 {% block content %}
 
     <ul>
-
-        <li>User ID: {{ user_details['user_id'] }}</li>
-        <li>Registration time: {{ user_details['submission_time'] }}</li>
-        <li>User name: {{ user_details['username'] }}</li>
-
-        <li>Number of asked questions: {{ number_of_questions['count'] }}</li>
-        <li>Number of answers: {{ number_of_answers['count'] }}</li>
-        <li>Number of comments: {{ number_of_comments['count'] }}</li>
+        <li>User ID: {{ user_details.user_id }}</li>
+        <li>Registration time: {{ user_details.submission_time }}</li>
+        <li>User name: {{ user_details.username }}</li>
+        <li>Number of asked questions: {{ number_of_questions.count }}</li>
+        <li>Number of answers: {{ number_of_answers.count }}</li>
+        <li>Number of comments: {{ number_of_comments.count }}</li>
     </ul>
 
     <h3>Questions</h3>
