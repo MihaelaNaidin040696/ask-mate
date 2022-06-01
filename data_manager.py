@@ -146,6 +146,18 @@ def edit_question(cursor, id, title, message):
 
 
 @database_common.connection_handler
+def view_number(cursor, id):
+    cursor.execute("""
+                UPDATE question 
+                SET view_number = view_number +1 
+                WHERE id=%(id)s
+                """,
+                {"id": id}
+                   )
+
+
+
+@database_common.connection_handler
 def vote_item(cursor, table, id, modifier):
     cursor.execute(
         f"UPDATE {table} SET vote_number = vote_number + %(modifier)s WHERE id = %(id)s;",
