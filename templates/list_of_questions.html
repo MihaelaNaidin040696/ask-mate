@@ -105,7 +105,7 @@
 
 
         {% if search != None %}
-            {% if date != None %}
+            {% if not date : %}
                 {% for question in dates %}
 
         <tr>
@@ -150,6 +150,111 @@
             {% endfor %}
             {% endif%}
             {% endif%}
+
+
+
+
+        {% if date : %}
+            {% for question in dates %}
+                {% for answer in date %}
+                     {% if answer.question_id == question.id %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{answer.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td>{{answer.image |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td></td>
+            <tr>
+
+        <tr>
+            <td>{{ question.id }}</td>
+            <td>{{ question.submission_time }}</td>
+            <td>{{ question.view_number }}</td>
+            <td>{{ question.vote_number }}</td>
+                <td>
+                <a
+                    href="{{ url_for('display_question_by_id', question_id=question.id) }}"
+                    >{{ question.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                >
+            </td>
+            <td>{{ question.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+
+            <td>
+                {% if question.image %}
+                <img
+                    src="{{ url_for('static', filename='images/' + question.image) }}"
+                    alt="No image found"
+                />
+                {% endif %}
+            </td>
+            <td>
+                <form
+                    action="{{ url_for('vote_up_question', question_id=question.id)}}"
+                >
+                    <button class="btn btn-primary" type="submit">
+                        Vote up
+                    </button>
+                </form>
+                <form
+                    action="{{ url_for('vote_down_question', question_id=question.id)}}"
+                >
+                    <button class="btn btn-danger" type="submit">
+                        Vote down
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+{% endif%}
+{% endfor %}
+{% if question.id not in simple_data%}
+        <tr>
+            <td>{{ question.id }}</td>
+            <td>{{ question.submission_time }}</td>
+            <td>{{ question.view_number }}</td>
+            <td>{{ question.vote_number }}</td>
+                <td>
+                <a
+                    href="{{ url_for('display_question_by_id', question_id=question.id) }}"
+                    >{{ question.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                >
+            </td>
+            <td>{{ question.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+
+            <td>
+                {% if question.image %}
+                <img
+                    src="{{ url_for('static', filename='images/' + question.image) }}"
+                    alt="No image found"
+                />
+                {% endif %}
+            </td>
+            <td>
+                <form
+                    action="{{ url_for('vote_up_question', question_id=question.id)}}"
+                >
+                    <button class="btn btn-primary" type="submit">
+                        Vote up
+                    </button>
+                </form>
+                <form
+                    action="{{ url_for('vote_down_question', question_id=question.id)}}"
+                >
+                    <button class="btn btn-danger" type="submit">
+                        Vote down
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+
+            {% endif%}
+            {% endfor %}
+            {% endif%}
+
 
 
     </tbody>

@@ -354,6 +354,13 @@ def get_data_for_search_answer(cursor, search):
 
 
 @database_common.connection_handler
+def get_data_for_search_answer_and_question(cursor):
+    cursor.execute(
+        "SELECT question_id from question join answer on answer.question_id != question.id;",
+    )
+    return cursor.fetchall()
+
+@database_common.connection_handler
 def get_latest_questions(cursor):
     cursor.execute(
         "SELECT submission_time, title, message FROM question ORDER BY submission_time LIMIT 5;"
