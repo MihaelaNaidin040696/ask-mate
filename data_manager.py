@@ -18,7 +18,7 @@ def get_questions(cursor):
 @database_common.connection_handler
 def get_question_by_id(cursor, id):
     cursor.execute(
-        "SELECT title, message FROM question WHERE id = %(id)s;",
+        "SELECT * FROM question WHERE id = %(id)s;",
         {"id": id},
     )
     return cursor.fetchone()
@@ -441,6 +441,24 @@ def get_answers_by_user_id(cursor, user_id):
 @database_common.connection_handler
 def get_comments_by_user_id(cursor, user_id):
     cursor.execute("SELECT * FROM comment "
-                   "WHERE  user_id = %(user_id)s ",
+                   "WHERE  user_id = %(user_id)s ;",
                     {'user_id': user_id})
     return cursor.fetchall()
+
+
+@database_common.connection_handler
+def accept_answer(cursor, answer_id):
+    cursor.execute("UPDATE answer "
+                   "SET acceptance = 'yes' "
+                   "WHERE acceptance IS NULL AND id=%(answer_id)s;",
+                   {'answer_id': answer_id}
+                   )
+
+
+@database_common.connection_handler
+def cancel_other_accepted_answer(cursor, question_id):
+    cursor.execute("UPDATE answer "
+                   "SET acceptance = NULL "
+                   "WHERE acceptance = 'yes' AND question_id=%(question_id)s;",
+                   {'question_id': question_id}
+                   )

@@ -125,6 +125,13 @@
             >
                 <button class="button_btn" type="submit">Vote down</button>
             </form>
+            {% if question.user_id == session['id'] and question.user_id != Null and session['id'] != Null %}
+            <form
+                    action="{{ url_for('get_accepted_answer', question_id=question.id, answer_id=answer.id) }}"
+                    class="d-inline ml-1">
+                <button>accept answer</button>
+            </form>
+            {% endif %}
             <form
                 class="d-inline ml-auto"
                 action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
