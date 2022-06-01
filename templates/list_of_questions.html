@@ -105,7 +105,7 @@
 
 
         {% if search != None %}
-            {% if not date : %}
+            {% if not date  %}
                 {% for question in dates %}
 
         <tr>
@@ -133,14 +133,14 @@
                 <form
                     action="{{ url_for('vote_up_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-primary" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote up
                     </button>
                 </form>
                 <form
                     action="{{ url_for('vote_down_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-danger" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote down
                     </button>
                 </form>
@@ -149,27 +149,19 @@
 
             {% endfor %}
             {% endif%}
-            {% endif%}
 
 
 
 
-        {% if date : %}
-            {% for question in dates %}
-                {% for answer in date %}
-                     {% if answer.question_id == question.id %}
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{answer.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
-                <td>{{answer.image |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
-                <td></td>
-            <tr>
+{% if dates  %}
+        {% if date  %}
 
-        <tr>
+                {% for question in dates%}
+
+
+
+
+                <tr>
             <td>{{ question.id }}</td>
             <td>{{ question.submission_time }}</td>
             <td>{{ question.view_number }}</td>
@@ -194,56 +186,70 @@
                 <form
                     action="{{ url_for('vote_up_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-primary" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote up
                     </button>
                 </form>
                 <form
                     action="{{ url_for('vote_down_question', question_id=question.id)}}"
                 >
-                    <button class="btn btn-danger" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote down
                     </button>
                 </form>
             </td>
         </tr>
+
+
+
+
+{% endfor %}
 
 {% endif%}
-{% endfor %}
-{% if question.id not in simple_data%}
-        <tr>
-            <td>{{ question.id }}</td>
-            <td>{{ question.submission_time }}</td>
-            <td>{{ question.view_number }}</td>
-            <td>{{ question.vote_number }}</td>
+{% endif%}
+
+{% if not dates %}
+            {% if date %}
+
+                {% for answer in date %}
+                {% for quest in all_questions %}
+                        {% if quest.id == answer.question_id %}
+
+
+
+                <tr>
+            <td>{{ quest.id }}</td>
+            <td>{{ quest.submission_time  }}</td>
+            <td>{{ quest.view_number }}</td>
+            <td>{{ quest.vote_number }}</td>
                 <td>
                 <a
-                    href="{{ url_for('display_question_by_id', question_id=question.id) }}"
-                    >{{ question.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                    href="{{ url_for('display_question_by_id', question_id=quest.id) }}"
+                    >{{ quest.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
                 >
             </td>
-            <td>{{ question.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+            <td>{{ quest.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
 
             <td>
-                {% if question.image %}
+                {% if quest.image %}
                 <img
-                    src="{{ url_for('static', filename='images/' + question.image) }}"
+                    src="{{ url_for('static', filename='images/' + quest.image) }}"
                     alt="No image found"
                 />
                 {% endif %}
             </td>
             <td>
                 <form
-                    action="{{ url_for('vote_up_question', question_id=question.id)}}"
+                    action="{{ url_for('vote_up_question', question_id=quest.id)}}"
                 >
-                    <button class="btn btn-primary" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote up
                     </button>
                 </form>
                 <form
-                    action="{{ url_for('vote_down_question', question_id=question.id)}}"
+                    action="{{ url_for('vote_down_question', question_id=quest.id)}}"
                 >
-                    <button class="btn btn-danger" type="submit">
+                    <button class="button_btn" type="submit">
                         Vote down
                     </button>
                 </form>
@@ -251,12 +257,13 @@
         </tr>
 
 
-            {% endif%}
+                {% endif%}
             {% endfor %}
-            {% endif%}
 
-
-
+            {% endfor %}
+        {% endif%}
+{% endif%}
+    {% endif%}
     </tbody>
 </table>
 
