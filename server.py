@@ -382,9 +382,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
+    session.clear()
     return redirect(url_for('login'))
 
 
@@ -411,6 +409,13 @@ def user_page(user_id):
 def list_tags():
     tags = data_manager.get_tags()
     return render_template('list_of_tags.html', tags=tags)
+
+
+@app.route('/accept_answer/<question_id>/<answer_id>')
+def get_accepted_answer(question_id, answer_id):
+    data_manager.cancel_other_accepted_answer(question_id)
+    data_manager.accept_answer(answer_id)
+    return redirect(url_for('display_question_by_id', question_id=question_id))
 
 
 if __name__ == "__main__":

@@ -95,7 +95,9 @@
     >
 </div>
 <br />
+    {% if question.user_id == session['id']  %}
 {% for answer in answers %}
+
 <div class="card text-center">
     <div class="card-body">
         {% if question.image %}
@@ -128,6 +130,13 @@
             >
                 <button class="button_btn" type="submit">Vote down</button>
             </form>
+            {% if question.user_id == session['id'] and question.user_id != Null and session['id'] != Null %}
+            <form
+                    action="{{ url_for('get_accepted_answer', question_id=question.id, answer_id=answer.id) }}"
+                    class="d-inline ml-1">
+                <button>accept answer</button>
+            </form>
+            {% endif %}
             <form
                 class="d-inline ml-auto"
                 action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
@@ -158,5 +167,75 @@
 </div>
 <br />
 {% endfor %}
+    {% else %}
+{% for answer in answers %}
+    {% if answer.acceptance == 'yes' %}
+<div class="card text-center">
+    <div class="card-body">
+        {% if question.image %}
+        <p class="card-link">
+            <img
+                src="{{ url_for('static', filename='images/' + question_image) }}"
+                style="width: 100px; height: 100px"
+                alt="No image found"
+            />
+        </p>
+        {% endif %}
+        <h5 class="card-title">{{ answer.submission_time }}</h5>
+        <p class="card-text">{{ answer.message }}</p>
+        <p class="card-link">{{ answer.vote_number }}</p>
+    {% if answer.user_id == session.id %}
+        <a href="{{ url_for('edit_answer', answer_id=answer.id)}}">
+            Edit answer</a
+        >
+        {% endif %}
+        <br /><br />
 
+        <div class="d-flex">
+            <form
+                class="d-inline"
+                action="{{ url_for('vote_up_answer', answer_id=answer.id, question_id=question_id)}}"
+            >
+                <button class="button_btn" type="submit">Vote up</button>
+            </form>
+            <form
+                class="d-inline ml-1"
+                action="{{ url_for('vote_down_answer', answer_id=answer.id)}}"
+            >
+                <button class="button_btn" type="submit">Vote down</button>
+            </form>
+            {% if answer.user_id == session.id %}
+            <form
+                class="d-inline ml-auto"
+                action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
+                method="post"
+            >
+                <button class="button_btn" type="submit">Delete answer</button>
+            </form>
+                {% endif %}
+        </div>
+        <h3>ANSWER COMMENTS</h3>
+        {% for comment in answer_comment %}
+            {% if answer.id == comment.answer_id %}
+                <div class="card text-center">
+                    <h5 class="card-title">{{ comment.submission_time }}</h5>
+                    <p class="card-text">{{ comment.message }}</p>
+                    <p class="card-text">{{ comment.edited_count }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <br />
+        <form
+            class="d-inline"
+            action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
+        >
+            <button class="button_btn" type="submit">Add answer comment</button>
+        </form>
+        <br /><br />
+    </div>
+</div>
+<br />
+    {% endif %}
+{% endfor %}
+    {% endif %}
 {% endblock %}

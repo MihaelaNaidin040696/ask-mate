@@ -132,3 +132,4 @@ CREATE TABLE IF NOT EXISTS user_registration (
 ALTER TABLE question ADD user_id integer NULL;
 ALTER TABLE answer ADD user_id integer NULL;
 ALTER TABLE comment ADD user_id integer NULL;
+ALTER TABLE answer ADD acceptance text NULL;
