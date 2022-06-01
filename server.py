@@ -397,16 +397,10 @@ def list_users():
 @app.route('/user/<user_id>')
 def user_page(user_id):
     user_details = data_manager.get_user_details_with_id()
-    number_of_questions = data_manager.get_number_of_questions_by_user_id(user_id)
-    number_of_answers = data_manager.get_number_of_answers_by_user_id(user_id)
-    number_of_comments = data_manager.get_number_of_comments_by_user_id(user_id)
     questions_of_user = data_manager.get_questions_by_user_id(user_id)
     answers_of_user = data_manager.get_answers_by_user_id(user_id)
     comments_of_user = data_manager.get_comments_by_user_id(user_id)
     return render_template('user_page.html', user_details=user_details,
-                           number_of_questions=number_of_questions,
-                           number_of_answers=number_of_answers,
-                           number_of_comments=number_of_comments,
                            questions_of_user=questions_of_user,
                            answers_of_user=answers_of_user,
                            comments_of_user=comments_of_user,)

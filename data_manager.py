@@ -383,30 +383,6 @@ def insert_user_credentials(cursor, username, email, password):
 
 
 @database_common.connection_handler
-def get_number_of_questions_by_user_id(cursor, user_id):
-    cursor.execute("SELECT COUNT(user_id) "
-                   "FROM question ",
-                    {"user_id": user_id})
-    return cursor.fetchone()
-
-
-@database_common.connection_handler
-def get_number_of_answers_by_user_id(cursor, user_id):
-    cursor.execute("SELECT COUNT(user_id) "
-                   "FROM answer ",
-                    {"user_id": user_id})
-    return cursor.fetchone()
-
-
-@database_common.connection_handler
-def get_number_of_comments_by_user_id(cursor, user_id):
-    cursor.execute("SELECT COUNT(user_id) "
-                   "FROM comment ",
-                    {"user_id": user_id})
-    return cursor.fetchone()
-
-
-@database_common.connection_handler
 def get_user_details_without_id(cursor):
     cursor.execute(
         "SELECT DISTINCT username, "
@@ -428,10 +404,21 @@ def get_user_details_without_id(cursor):
 
 @database_common.connection_handler
 def get_user_details_with_id(cursor):
-    cursor.execute(
-        "SELECT user_id, submission_time, username "
-        "FROM user_registration"
-    )
+    cursor.execute("SELECT user_registration.user_id, "
+                   "username, "
+                   "user_registration.submission_time, "
+                   "COUNT(DISTINCT question.id) as number_of_questions, "
+                   "COUNT(DISTINCT answer.id) as number_of_answers, "
+                   "COUNT(DISTINCT comment.id) as number_of_comments "
+                   "FROM user_registration "
+                   "LEFT JOIN question "
+                   "ON user_registration.user_id = question.user_id "
+                   "LEFT JOIN answer "
+                   "ON user_registration.user_id = answer.user_id "
+                   "LEFT JOIN comment "
+                   "ON user_registration.user_id = comment.user_id "
+                   "GROUP BY user_registration.username, user_registration.submission_time, user_registration.user_id;"
+                   )
     return cursor.fetchone()
 
 
