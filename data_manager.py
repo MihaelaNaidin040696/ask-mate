@@ -106,17 +106,15 @@ def write_answer(cursor, question_id, message, image, user_id):
 
 
 @database_common.connection_handler
-def delete_question(cursor, id, user_id):
+def delete_question(cursor, id):
     cursor.execute(
         """
             DELETE FROM comment WHERE question_id = %(id)s;
             DELETE FROM answer WHERE question_id = %(id)s;
             DELETE FROM question_tag WHERE question_id = %(id)s;
             DELETE FROM question WHERE id = %(id)s;
-            DELETE FROM question WHERE user_id = %(user_id)s;
         """,
-        {"id": id,
-         "user_id": user_id},
+        {"id": id},
     )
 
 

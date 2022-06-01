@@ -97,7 +97,8 @@ def add_new_question():
         qid = data_manager.write_question(
             request.form.get("title").capitalize(),
             request.form.get("message").capitalize(),
-            image,session['id']
+            image,
+            session['id'],
         )
 
         return redirect(
@@ -133,7 +134,7 @@ def add_new_answer(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET", "POST"])
 def delete_questions(question_id):
-    data_manager.delete_question(question_id, session['id'])
+    data_manager.delete_question(question_id)
     return redirect(
         url_for(
             "display_questions",
