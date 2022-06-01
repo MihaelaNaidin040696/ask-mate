@@ -194,21 +194,29 @@ def vote_answer(aid, callback):
 
 @app.route("/question/<question_id>/vote-up")
 def vote_up_question(question_id):
+    question = data_manager.get_question_by_id(question_id)
+    data_manager.modify_reputation(5, question['user_id'])
     return vote_question(question_id, data_manager.vote_up_question)
 
 
 @app.route("/question/<question_id>/vote-down")
 def vote_down_question(question_id):
+    question = data_manager.get_question_by_id(question_id)
+    data_manager.modify_reputation(-2, question['user_id'])
     return vote_question(question_id, data_manager.vote_down_question)
 
 
 @app.route("/answer/<answer_id>/vote-up")
 def vote_up_answer(answer_id):
+    answer = data_manager.get_answers_by_answer_id(answer_id)
+    data_manager.modify_reputation(10, answer['user_id'])
     return vote_answer(answer_id, data_manager.vote_up_answer)
 
 
 @app.route("/answer/<answer_id>/vote-down")
 def vote_down_answer(answer_id):
+    answer = data_manager.get_answers_by_answer_id(answer_id)
+    data_manager.modify_reputation(-2, answer['user_id'])
     return vote_answer(answer_id, data_manager.vote_down_answer)
 
 
@@ -415,6 +423,8 @@ def list_tags():
 def get_accepted_answer(question_id, answer_id):
     data_manager.cancel_other_accepted_answer(question_id)
     data_manager.accept_answer(answer_id)
+    answer = data_manager.get_answers_by_answer_id(answer_id)
+    data_manager.modify_reputation(15, answer['user_id'])
     return redirect(url_for('display_question_by_id', question_id=question_id))
 
 

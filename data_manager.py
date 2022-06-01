@@ -473,3 +473,13 @@ def cancel_other_accepted_answer(cursor, question_id):
                    "WHERE acceptance = 'yes' AND question_id=%(question_id)s;",
                    {'question_id': question_id}
                    )
+
+
+@database_common.connection_handler
+def modify_reputation(cursor, modifier, user_id):
+    cursor.execute("UPDATE user_registration "
+                   "SET reputation = reputation + %(modifier)s "
+                   "WHERE user_id = %(user_id)s;",
+                   {'modifier': modifier,
+                    'user_id': user_id}
+                   )
