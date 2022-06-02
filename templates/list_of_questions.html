@@ -116,10 +116,10 @@
                 <td>
                 <a
                     href="{{ url_for('display_question_by_id', question_id=question.id) }}"
-                    >{{ question.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                    >{{ question.title.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</a
                 >
             </td>
-            <td>{{ question.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+            <td>{{ question.message.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
 
             <td>
                 {% if question.image %}
@@ -169,8 +169,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{answer.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
-                <td>{{answer.image |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td>{{answer.message.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td>{{answer.image.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
                 <td></td>
             <tr>
 
@@ -184,10 +184,10 @@
                 <td>
                 <a
                     href="{{ url_for('display_question_by_id', question_id=quest.id) }}"
-                    >{{ quest.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                    >{{ quest.title.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</a
                 >
             </td>
-            <td>{{ quest.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+            <td>{{ quest.message.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
 
             <td>
                 {% if quest.image %}
@@ -233,10 +233,10 @@
                 <td>
                 <a
                     href="{{ url_for('display_question_by_id', question_id=question.id) }}"
-                    >{{ question.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                    >{{ question.title.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</a
                 >
             </td>
-            <td>{{ question.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+            <td>{{ question.message.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
 
             <td>
                 {% if question.image %}
@@ -282,8 +282,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{answer.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
-                <td>{{answer.image |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td>{{answer.message.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+                <td>{{answer.image.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
                 <td></td>
             <tr>
 
@@ -297,10 +297,10 @@
                 <td>
                 <a
                     href="{{ url_for('display_question_by_id', question_id=quest.id) }}"
-                    >{{ quest.title |replace (search, '<mark>' + search + '</mark>') | safe}}</a
+                    >{{ quest.title.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</a
                 >
             </td>
-            <td>{{ quest.message |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
+            <td>{{ quest.message.lower() |replace (search, '<mark>' + search + '</mark>') | safe}}</td>
 
             <td>
                 {% if quest.image %}

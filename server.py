@@ -60,13 +60,7 @@ def search_list():
     all_questions=data_manager.get_questions()
     criteria, direction, search = get_request_data()
     dates_question = data_manager.get_data_for_search_question(search)
-    print(11)
-    print(all_questions)
-    print(22)
-    print(dates_question)
     dates_answer = data_manager.get_data_for_search_answer(search)
-    print(33)
-    print(dates_answer)
     sorted_questions = data_manager.sort_questions(criteria, direction)
     only_questions_without_answers = data_manager.get_data_for_search_answer_and_question()
     for ids in only_questions_without_answers:
@@ -77,7 +71,7 @@ def search_list():
         "list_of_questions.html",
         questions=sorted_questions,
         dates=dates_question,
-        search=search.upper(),
+        search=search.lower(),
         date=dates_answer,
         simple_data = list_id,
         all_questions=all_questions,
@@ -108,8 +102,8 @@ def add_new_question():
     if request.method == "POST":
         image = upload_image()
         qid = data_manager.write_question(
-            request.form.get("title").upper(),
-            request.form.get("message").upper(),
+            request.form.get("title").capitalize(),
+            request.form.get("message").capitalize(),
             image,
             session['id'],
         )
@@ -129,7 +123,7 @@ def add_new_answer(question_id):
         image = upload_image()
         data_manager.write_answer(
             question_id,
-            request.form.get("message").upper(),
+            request.form.get("message").capitalize(),
             image,
             session['id'],
         )
@@ -173,8 +167,8 @@ def delete_answers(answer_id):
 def edit_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     if request.method == "POST":
-        title = request.form.get("title").upper()
-        message = request.form.get("message").upper()
+        title = request.form.get("title").capitalize()
+        message = request.form.get("message").capitalize()
         data_manager.edit_question(question_id, title, message)
         return redirect(
             url_for(
@@ -272,7 +266,7 @@ def edit_answer(answer_id):
     answer = data_manager.get_answers_by_answer_id(answer_id)
     if request.method == "POST":
         question_id = data_manager.get_id_question_by_id_answer(answer_id)
-        message = request.form.get("message").upper()
+        message = request.form.get("message").capitalize()
         data_manager.edit_answer(answer_id, message)
         return redirect(
             url_for(

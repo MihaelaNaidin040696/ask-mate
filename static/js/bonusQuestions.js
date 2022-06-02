@@ -50,3 +50,19 @@ function increaseFont() {
 function decreaseFont() {
     console.log("decreaseFont")
 }
+
+function changeFontSize(type){
+    let ids = ['#ius', '#p'];
+    ids.forEach(id => {
+        let el = document.querySelector(id);
+        let fontsize = window.getComputedStyle(el,null).getPropertyValue("font-size")
+        fontsize = parseFloat(fontsize);
+        if (type  === "increase") {
+            el.style.fontsize = (fontsize + 5) + "px"
+        }else{
+            el.style.fontsize = (fontsize - 5) + "px"
+        }
+        return el.style.frontsize;
+    });
+}
+

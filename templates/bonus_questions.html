@@ -2,13 +2,16 @@
     <head>
         <script type="text/javascript" src="{{ url_for('static', filename='js/bonusQuestions.js') }}" defer></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/doNotModifyThisFile.js') }}" defer></script>
+        <title>JavaScript Change Font Size</title>
+        <link rel="stylesheet" href="static/bonusQuestion.css">
     </head>
     <body>
-        <h1>AskMate</h1>
-        <h2>All Questions:</h2>
-        <button id="theme-button">Change Theme to Dark</button>
-        <button id="increase-font-button">Increase page font</button>
-        <button id="decrease-font-button">Decrease page font</button>
+     <div class="container" >
+        <h1 id="head">AskMate</h1>
+        <h2 id="seme_head">All Questions:</h2>
+        <button  type="button" id="theme-button">Change Theme to Dark</button>
+        <button  type="button" id="increase-font-button" onclick="changeFontSize('increase')">Increase page font</button>
+        <button  type="button" id="decrease-font-button" onclick="changeFontSize('decrease')">Decrease page font</button>
         <input
                 data-table-body="doNotModifyThisId_QuestionsTableBody"
                 style="width: 500px" id="doNotModifyThisId_QuestionsFilter"
@@ -16,7 +19,7 @@
                 placeholder="filter questions by keywords">
         <table>
             <thead id="doNotModifyThisId_QuestionsTableHeader">
-                <tr>
+                <tr id="row">
                     <td>Title</td>
                     <td>Description</td>
                     <td>Vote Count</td>
@@ -34,5 +37,6 @@
                 {% endfor %}
             </tbody>
         </table>
+     </div>
     </body>
 </html>
