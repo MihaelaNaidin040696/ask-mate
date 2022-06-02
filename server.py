@@ -58,16 +58,24 @@ def display_questions():
 
 @app.route("/search", methods=["GET", "POST"])
 def search_list():
+    list_id = []
+    all_questions = data_manager.get_questions()
     criteria, direction, search = get_request_data()
     dates_question = data_manager.get_data_for_search_question(search)
     dates_answer = data_manager.get_data_for_search_answer(search)
     sorted_questions = data_manager.sort_questions(criteria, direction)
+    only_questions_without_answers = data_manager.get_data_for_search_answer_and_question()
+    for ids in only_questions_without_answers:
+        if ids['question_id'] not in list_id:
+            list_id.append(ids['question_id'])
     return render_template(
         "list_of_questions.html",
         questions=sorted_questions,
         dates=dates_question,
-        search=search,
+        search=search.lower(),
         date=dates_answer,
+        simple_data=list_id,
+        all_questions=all_questions,
     )
 
 
