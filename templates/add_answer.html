@@ -1,32 +1,40 @@
 {% extends "base.html" %}
-
 {% block title %}Post an answer{% endblock title %}
-
 {% block content %}
+
 <form
     method="POST"
     action="{{ url_for('add_new_answer', question_id=question_id) }}"
-    enctype="multipart/form-data"
->
-    <label class="form-label" for="message">Message</label><br />
+    enctype="multipart/form-data">
+    <label
+            class="form-label"
+            for="message">
+        Message
+    </label><br>
     <textarea
         id="message"
         class="form-control"
         rows="4"
         cols="40"
         name="message"
-        required
-    ></textarea>
+        required>
+    </textarea>
 
-    <label class="form-label mt-3" for="image">Upload image</label>
+    <label
+            class="form-label mt-3"
+            for="image">
+        Upload image
+    </label>
     <input
         type="file"
         accept="image/*"
         name="image"
         id="image"
-        class="form-control"
-    />
-
-    <button class="button_btn" type="submit">Add</button>
+        class="form-control"/>
+    <button
+            class="button_btn"
+            type="submit">
+        Add
+    </button>
 </form>
 {% endblock %}
