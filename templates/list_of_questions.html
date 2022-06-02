@@ -3,19 +3,6 @@
 {% block title %}Question list{% endblock title %}
 
 {% block content %}
-<form class="d-inline" action="{{ url_for('display_latest_questions') }}">
-    <button class="button_btn" type="submit">Latest questions</button>
-</form>
-
-    {% if 'username' in session %}
-<form class="d-inline" action="{{ url_for('list_users') }}">
-    <button class="button_btn" type="submit">Users list</button>
-</form>
-    {% endif %}
-
-<form class="d-inline" action="{{ url_for('list_tags') }}">
-    <button class="button_btn" type="submit">Tags list</button>
-</form><br><br>
 
 <form action="/list">
     <select

@@ -41,7 +41,7 @@
 >
 {% endfor %}
 <br />
-<div class="d-grid gap-2 d-md-block">
+<div>
     <form
         class="d-inline"
         action="{{ url_for('add_question_tag', question_id=question_id) }}"
@@ -57,7 +57,7 @@
 
 <h3>QUESTION COMMENTS</h3>
 {% for comment in question_comment %}
-<div class="card text-center">
+<div>
     <h5 class="card-title">{{ comment.submission_time }}</h5>
     <p class="card-text">{{ comment.message }}</p>
     <p class="card-text">{{ comment.edited_count }}</p>
@@ -67,39 +67,39 @@
     >
         <button class="button_btn" type="submit">Edit comment</button>
     </form>
-    <br />
+    <br>
     <a
         href="{{ url_for('delete_comment', comment_id=comment.id) }}"
         class="fa fa-trash"
     >
         Delete comment</a
-    ><br />
+    ><br>
 </div>
-<br />
+<br>
 {% endfor %}
-<br />
+<br>
 <form
     class="d-inline"
     action="{{ url_for('add_question_comment', question_id=question_id)}}"
 >
     <button class="button_btn" type="submit">Add question comment</button>
 </form>
-<br /><br />
+<br><br>
 
 <h2>ANSWERS</h2>
-<div class="d-grid gap-2 d-md-block">
+<div>
     <p><a
         href="{{ url_for('add_new_answer', question_id=question_id)}}"
         class="button_btn"
         >Here</a
     > you can post an answer</p>
 </div>
-<br />
+<br>
     {% if question.user_id == session['id']  %}
 {% for answer in answers %}
 
-<div class="card text-center">
-    <div class="card-body">
+<div>
+    <div>
         {% if question.image %}
         <p class="card-link">
             <img
@@ -128,7 +128,7 @@
             <form
                     action="{{ url_for('get_accepted_answer', question_id=question.id, answer_id=answer.id) }}"
                     class="d-inline ml-1">
-                <button>Accept answer</button>
+                <button class="button_btn">Accept answer</button>
             </form>
             {% endif %}
             <form
@@ -148,30 +148,30 @@
         <h3>ANSWER COMMENTS</h3>
         {% for comment in answer_comment %}
             {% if answer.id == comment.answer_id %}
-                <div class="card text-center">
+                <div>
                     <h5 class="card-title">{{ comment.submission_time }}</h5>
                     <p class="card-text">{{ comment.message }}</p>
                     <p class="card-text">{{ comment.edited_count }}</p>
                 </div>
             {% endif %}
         {% endfor %}
-        <br />
+        <br>
         <form
             class="d-inline"
             action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
         >
             <button class="button_btn" type="submit">Add answer comment</button>
         </form>
-        <br /><br />
+        <br><br>
     </div>
 </div>
-<br />
+<br>
 {% endfor %}
     {% else %}
 {% for answer in answers %}
     {% if answer.acceptance == 'yes' %}
-<div class="card text-center">
-    <div class="card-body">
+<div>
+    <div>
         {% if question.image %}
         <p class="card-link">
             <img
@@ -191,7 +191,7 @@
             <button class="button_btn" type="submit">Edit answer</button>
         </form>
         {% endif %}
-        <br /><br />
+        <br><br>
 
         <div class="d-flex">
             <form
@@ -219,24 +219,24 @@
         <h3>ANSWER COMMENTS</h3>
         {% for comment in answer_comment %}
             {% if answer.id == comment.answer_id %}
-                <div class="card text-center">
+                <div>
                     <h5 class="card-title">{{ comment.submission_time }}</h5>
                     <p class="card-text">{{ comment.message }}</p>
                     <p class="card-text">{{ comment.edited_count }}</p>
                 </div>
             {% endif %}
         {% endfor %}
-        <br />
+        <br>
         <form
             class="d-inline"
             action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
         >
             <button class="button_btn" type="submit">Add answer comment</button>
         </form>
-        <br /><br />
+        <br><br>
     </div>
 </div>
-<br />
+<br>
     {% endif %}
 {% endfor %}
     {% endif %}
