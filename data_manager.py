@@ -461,6 +461,14 @@ def get_tags(cursor):
 
 
 @database_common.connection_handler
+def get_data_for_search_answer_and_question(cursor):
+    cursor.execute(
+        "SELECT question_id from question join answer on answer.question_id != question.id;",
+    )
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
 def accept_answer(cursor, answer_id):
     cursor.execute("UPDATE answer "
                    "SET acceptance = 'yes' "
