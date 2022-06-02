@@ -34,9 +34,14 @@
                 <td>{{ question.vote_number }}</td>
                 <td>{{ question.title }}</td>
                 <td>{{ question.message }}</td>
-                <td><img
-                        src="{{ url_for('static', filename='images/' + question.image) }}"
-                        alt="No image found"/></td>
+                <td>{% if question.image %}
+                    <p class="card-link">
+                        <img
+                                src="{{ url_for('static', filename='images/' + question.image) }}"
+                                alt="No image found"/>
+                    </p>
+                {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
@@ -59,9 +64,14 @@
                 <td>{{ answer.vote_number }}</td>
 
                 <td>{{ answer.message }}</td>
-                <td><img
-                        src="{{ url_for('static', filename='images/' + answer.image) }}"
-                        alt="No image found"/></td>
+                <td>{% if answer.image %}
+                    <p class="card-link">
+                        <img
+                                src="{{ url_for('static', filename='images/' + answer.image) }}"
+                                alt="No image found"/>
+                    </p>
+                {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
