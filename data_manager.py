@@ -124,7 +124,7 @@ def delete_answer(cursor, id, user_id):
         """
             DELETE FROM comment WHERE answer_id = %(id)s;
             DELETE FROM answer WHERE id = %(id)s;
-            DELETE FROM answer WHERE user_id = %(user_id)s;
+            DELETE FROM answer WHERE user_id = %(user_id)s AND id = %(id)s;
         """,
         {"id": id,
          "user_id": user_id},
@@ -308,7 +308,7 @@ def add_new_tag(cursor, name):
 @database_common.connection_handler
 def delete_comment(cursor, id):
     cursor.execute(
-        "DELETE * FROM comment WHERE id = %(id)s;",
+        "DELETE FROM comment WHERE id = %(id)s;",
         {"id": id},
     )
 
