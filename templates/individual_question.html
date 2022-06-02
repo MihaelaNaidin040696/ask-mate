@@ -21,223 +21,269 @@
 </table>
 <form
     class="d-inline"
-    action="{{ url_for('edit_question', question_id=question_id)}}"
->
+    action="{{ url_for('edit_question', question_id=question_id)}}">
     <button class="button_btn" type="submit">Edit question</button>
 </form>
 
 <form
     class="d-inline"
-    action="{{ url_for('delete_questions', question_id=question_id)}}"
->
+    action="{{ url_for('delete_questions', question_id=question_id)}}">
     <button class="button_btn" type="submit">Delete question</button>
 </form>
-<br /><br />
+<br><br>
+
 <h2>TAGS</h2>
 {% for tag in tags %}
 <a
     href="{{ url_for('delete_question_tag', question_id=question_id, tag_id=tag.id) }}"
-    >{{ tag.name }}</a
->
+    >{{ tag.name }}</a><br>
 {% endfor %}
-<br />
+<br>
+
 <div>
     <form
         class="d-inline"
         action="{{ url_for('add_question_tag', question_id=question_id) }}"
-        method="GET"
-    >
+        method="GET">
         <button class="button_btn" type="submit">Add question tag</button>
     </form>
     <form class="d-inline" action="{{ url_for('list_tags') }}">
         <button class="button_btn" type="submit">Tags list</button>
     </form>
 </div>
-<br />
+<br>
 
 <h3>QUESTION COMMENTS</h3>
 {% for comment in question_comment %}
 <div>
-    <h5 class="card-title">{{ comment.submission_time }}</h5>
-    <p class="card-text">{{ comment.message }}</p>
-    <p class="card-text">{{ comment.edited_count }}</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Submission time</th>
+            <th scope="col">Message</th>
+            <th scope="col">Edited times</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ comment.submission_time }}</td>
+            <td>{{ comment.message }}</td>
+            <td>{{ comment.edited_count }}</td>
+        </tr>
+    </tbody>
+</table>
     <form
         class="d-inline"
-        action="{{ url_for('edit_comment', comment_id=comment.id) }}"
-    >
+        action="{{ url_for('edit_comment', comment_id=comment.id) }}">
         <button class="button_btn" type="submit">Edit comment</button>
     </form>
     <br>
     <a
         href="{{ url_for('delete_comment', comment_id=comment.id) }}"
-        class="fa fa-trash"
-    >
-        Delete comment</a
-    ><br>
+        class="fa fa-trash">
+        Delete comment</a><br>
 </div>
 <br>
 {% endfor %}
 <br>
+
 <form
     class="d-inline"
-    action="{{ url_for('add_question_comment', question_id=question_id)}}"
->
+    action="{{ url_for('add_question_comment', question_id=question_id)}}">
     <button class="button_btn" type="submit">Add question comment</button>
 </form>
 <br><br>
 
 <h2>ANSWERS</h2>
-<div>
-    <p><a
-        href="{{ url_for('add_new_answer', question_id=question_id)}}"
-        class="button_btn"
-        >Here</a
-    > you can post an answer</p>
-</div>
-<br>
-    {% if question.user_id == session['id']  %}
-{% for answer in answers %}
-
-<div>
     <div>
-        {% if question.image %}
-        <p class="card-link">
-            <img
-                src="{{ url_for('static', filename='images/' + question_image) }}"
-                alt="No image found"
-            />
-        </p>
-        {% endif %}
-        <h5 class="card-title">{{ answer.submission_time }}</h5>
-        <p class="card-text">{{ answer.message }}</p>
-        <p class="card-link">{{ answer.vote_number }}</p>
+        <p><a
+            href="{{ url_for('add_new_answer', question_id=question_id)}}"
+            class="button_btn">Here</a> you can post an answer</p>
+    </div>
+    <br>
+    {% if question.user_id == session['id']  %}
+    {% for answer in answers %}
+    <div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Submission time</th>
+                <th scope="col">Message</th>
+                <th scope="col">Vote number</th>
+                <th scope="col">Image</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ answer.submission_time }}</td>
+                <td>{{ answer.message }}</td>
+                <td>{{ answer.vote_number }}</td>
+                <td>{% if question.image %}
+                    <p class="card-link">
+                        <img
+                                src="{{ url_for('static', filename='images/' + question_image) }}"
+                                alt="No image found"/>
+                    </p>
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
         <div class="d-flex">
             <form
                 class="d-inline"
-                action="{{ url_for('vote_up_answer', answer_id=answer.id, question_id=question_id)}}"
-            >
+                action="{{ url_for('vote_up_answer', answer_id=answer.id, question_id=question_id)}}">
                 <button class="button_btn" type="submit">Vote up</button>
             </form>
             <form
-                class="d-inline ml-1"
-                action="{{ url_for('vote_down_answer', answer_id=answer.id)}}"
-            >
+                class="d-inline"
+                action="{{ url_for('vote_down_answer', answer_id=answer.id)}}">
                 <button class="button_btn" type="submit">Vote down</button>
             </form>
             {% if question.user_id == session['id'] and question.user_id != Null and session['id'] != Null %}
-            <form
+                <form
                     action="{{ url_for('get_accepted_answer', question_id=question.id, answer_id=answer.id) }}"
-                    class="d-inline ml-1">
-                <button class="button_btn">Accept answer</button>
-            </form>
+                    class="d-inline">
+                    <button class="button_btn">Accept answer</button>
+                </form>
             {% endif %}
             <form
-                class="col-md-8 text-right"
-                action="{{ url_for('edit_answer', answer_id=answer.id)}}"
-            >
+                class="d-inline"
+                action="{{ url_for('edit_answer', answer_id=answer.id)}}">
                 <button class="button_btn" type="submit">Edit answer</button>
             </form>
             <form
-                class="d-inline ml-auto"
+                class="d-inline"
                 action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
-                method="post"
-            >
+                method="post">
                 <button class="button_btn" type="submit">Delete answer</button>
             </form>
         </div>
+
         <h3>ANSWER COMMENTS</h3>
         {% for comment in answer_comment %}
             {% if answer.id == comment.answer_id %}
-                <div>
-                    <h5 class="card-title">{{ comment.submission_time }}</h5>
-                    <p class="card-text">{{ comment.message }}</p>
-                    <p class="card-text">{{ comment.edited_count }}</p>
-                </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Submission time</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Edited times</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ comment.submission_time }}</td>
+                        <td>{{ comment.message }}</td>
+                        <td>{{ comment.edited_count }}</td>
+                    </tr>
+                </tbody>
+            </table>
             {% endif %}
         {% endfor %}
         <br>
+
         <form
-            class="d-inline"
-            action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
-        >
+                class="d-inline"
+                action="{{ url_for('add_answer_comment', answer_id=answer.id)}}">
             <button class="button_btn" type="submit">Add answer comment</button>
         </form>
         <br><br>
-    </div>
-</div>
-<br>
+    </div><br>
 {% endfor %}
     {% else %}
 {% for answer in answers %}
     {% if answer.acceptance == 'yes' %}
-<div>
     <div>
-        {% if question.image %}
-        <p class="card-link">
-            <img
-                src="{{ url_for('static', filename='images/' + question_image) }}"
-                alt="No image found"
-            />
-        </p>
-        {% endif %}
-        <h5 class="card-title">{{ answer.submission_time }}</h5>
-        <p class="card-text">{{ answer.message }}</p>
-        <p class="card-link">{{ answer.vote_number }}</p>
+        <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">Submission time</th>
+                    <th scope="col">Message</th>
+                    <th scope="col">Vote number</th>
+                    <th scope="col">Image</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ answer.submission_time }}</td>
+                    <td>{{ answer.message }}</td>
+                    <td>{{ answer.vote_number }}</td>
+                    <td>{% if question.image %}
+                        <p class="card-link">
+                            <img
+                                    src="{{ url_for('static', filename='images/' + question_image) }}"
+                                    alt="No image found"/>
+                        </p>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
     {% if answer.user_id == session.id %}
         <form
             class="d-inline"
-            action="{{ url_for('edit_answer', answer_id=answer.id)}}"
-        >
+            action="{{ url_for('edit_answer', answer_id=answer.id)}}">
             <button class="button_btn" type="submit">Edit answer</button>
         </form>
-        {% endif %}
-        <br><br>
+    {% endif %}
+    <br><br>
 
-        <div class="d-flex">
-            <form
-                class="d-inline"
-                action="{{ url_for('vote_up_answer', answer_id=answer.id, question_id=question_id)}}"
-            >
-                <button class="button_btn" type="submit">Vote up</button>
-            </form>
-            <form
-                class="d-inline ml-1"
-                action="{{ url_for('vote_down_answer', answer_id=answer.id)}}"
-            >
-                <button class="button_btn" type="submit">Vote down</button>
-            </form>
-            {% if answer.user_id == session.id %}
+    <div class="d-flex">
+        <form
+            class="d-inline"
+            action="{{ url_for('vote_up_answer', answer_id=answer.id, question_id=question_id)}}">
+            <button class="button_btn" type="submit">Vote up</button>
+        </form>
+        <form
+            class="d-inline ml-1"
+            action="{{ url_for('vote_down_answer', answer_id=answer.id)}}">
+            <button class="button_btn" type="submit">Vote down</button>
+        </form>
+        {% if answer.user_id == session.id %}
             <form
                 class="d-inline ml-auto"
                 action="{{ url_for('delete_answers', answer_id=answer.id, question_id=question_id)}}"
-                method="post"
-            >
+                method="post">
                 <button class="button_btn" type="submit">Delete answer</button>
             </form>
-                {% endif %}
-        </div>
-        <h3>ANSWER COMMENTS</h3>
-        {% for comment in answer_comment %}
-            {% if answer.id == comment.answer_id %}
-                <div>
-                    <h5 class="card-title">{{ comment.submission_time }}</h5>
-                    <p class="card-text">{{ comment.message }}</p>
-                    <p class="card-text">{{ comment.edited_count }}</p>
-                </div>
-            {% endif %}
-        {% endfor %}
-        <br>
+        {% endif %}
+    </div>
+
+<h3>ANSWER COMMENTS</h3>
+{% for comment in answer_comment %}
+    {% if answer.id == comment.answer_id %}
+        <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Submission time</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Edited times</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ comment.submission_time }}</td>
+                        <td>{{ comment.message }}</td>
+                        <td>{{ comment.edited_count }}</td>
+                    </tr>
+                </tbody>
+            </table>
+    {% endif %}
+{% endfor %}
+<br>
+
         <form
             class="d-inline"
-            action="{{ url_for('add_answer_comment', answer_id=answer.id)}}"
-        >
+            action="{{ url_for('add_answer_comment', answer_id=answer.id)}}">
             <button class="button_btn" type="submit">Add answer comment</button>
         </form>
         <br><br>
     </div>
-</div>
 <br>
-    {% endif %}
+{% endif %}
 {% endfor %}
-    {% endif %}
+{% endif %}
 {% endblock %}
