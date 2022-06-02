@@ -335,7 +335,7 @@ def add_question_tag(question_id):
     return render_template(
         "add_tag.html",
         question_id=question_id,
-        tags=data_manager.get_tags(),
+        tags=data_manager.get_tags_list(),
     )
 
 
