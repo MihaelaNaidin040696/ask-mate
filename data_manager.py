@@ -274,7 +274,7 @@ def edit_comment(cursor, id, message):
 
 
 @database_common.connection_handler
-def get_tags(cursor):
+def get_tags_list(cursor):
     cursor.execute("SELECT name FROM tag;")
     return cursor.fetchall()
 
