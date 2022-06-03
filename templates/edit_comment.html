@@ -5,23 +5,11 @@
 {% block content %}
 <form
     method="POST"
-    action="{{ url_for('edit_comment', comment_id=comment_id) }}">
-    <label
-        for="message">
-        Message
-    </label><br>
-    <textarea
-        id="message"
-        rows="4"
-        cols="40"
-        name="message"
-        required>
-        {{ comment.message }}
-    </textarea><br>
-    <button
-        class="button_btn"
-        type="submit">
-        Edit
-    </button>
+    action="{{ url_for('edit_comment', comment_id=comment_id) }}"
+>
+    <label for="message"> Message </label><br />
+    <textarea id="message" rows="4" cols="40" name="message" required>{{ comment.message }}</textarea
+    ><br />
+    <button class="button_btn" type="submit">Edit</button>
 </form>
 {% endblock %}

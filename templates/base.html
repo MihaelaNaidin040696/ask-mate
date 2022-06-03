@@ -14,10 +14,13 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
         <link
+            href="https://fonts.googleapis.com/css2?family=Oswald&display=swap"
+            rel="stylesheet"
+        />
+        <link
             rel="stylesheet"
             href="{{ url_for('static', filename='main.css') }}"
         />
-        <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     </head>
     <body>
@@ -29,39 +32,48 @@
                 >
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         {% if 'username' in session %}
-                       <li class="nav-item">
+                        <li class="nav-item">
                             <a
                                 class="nav-link active"
                                 aria-current="page"
                                 href="{{ url_for('user_page',user_id=session['id']) }}"
-                                >You are logged in as: {{ session['username'] }}</a
+                                >You are logged in as: {{ session['username']
+                                }}</a
                             >
                         </li>
-                        </ul>
                         {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
-        <input type="checkbox" id="active">
+        <input type="checkbox" id="active" />
         <label for="active" class="menu-btn"><span></span></label>
         <label for="active" class="close"></label>
         <div class="wrapper">
-          <ul>
-            <li><a href="/">AskMate</a></li>
-            <li><a href="{{ url_for('display_questions') }}">Home</a></li>
-            <li><a href="{{ url_for('add_new_question') }}">Add a question</a></li>
-            <li><a href="{{ url_for('display_latest_questions') }}">Latest questions</a></li>
-            {% if 'username' in session %}
+            <ul>
+                <li><a href="/">AskMate</a></li>
+                <li><a href="{{ url_for('display_questions') }}">Home</a></li>
+                <li>
+                    <a href="{{ url_for('add_new_question') }}"
+                        >Add a question</a
+                    >
+                </li>
+                <li>
+                    <a href="{{ url_for('display_latest_questions') }}"
+                        >Latest questions</a
+                    >
+                </li>
+                {% if 'username' in session %}
                 <li><a href="{{ url_for('list_users') }}">List of users</a></li>
-            {% endif %}
-            <li><a href="{{ url_for('list_tags') }}">List of tags</a></li>
-            {% if 'username' in session %}
+                {% endif %}
+                <li><a href="{{ url_for('list_tags') }}">List of tags</a></li>
+                {% if 'username' in session %}
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            {% else %}
+                {% else %}
                 <li><a href="{{ url_for('login') }}">Login</a></li>
-            {% endif %}
+                {% endif %}
             </ul>
         </div>
-        <div class="container">{% block content %} {% endblock %}</div>
+        <div class="container">{% block content %}{% endblock %}</div>
     </body>
 </html>
