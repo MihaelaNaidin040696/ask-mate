@@ -234,7 +234,9 @@ def vote_down_answer(answer_id):
 def add_question_comment(question_id):
     if request.method == "POST":
         data_manager.add_question_comment(
-            question_id, request.form.get("message"), session["id"]
+            question_id,
+            request.form.get("message"),
+            session["id"],
         )
         return redirect(
             url_for(
@@ -253,7 +255,9 @@ def add_answer_comment(answer_id):
     question_id = data_manager.get_id_question_by_id_answer(answer_id)
     if request.method == "POST":
         data_manager.add_answer_comment(
-            answer_id, request.form.get("message"), session["id"]
+            answer_id,
+            request.form.get("message"),
+            session["id"],
         )
         return redirect(
             url_for(
@@ -326,11 +330,11 @@ def add_question_tag(question_id):
         tag = request.form.get("tag", request.form.get("name"))
         tag_id = data_manager.get_tag_id(tag)
 
-        if tag_id is None:
+        if not tag_id:
             data_manager.add_new_tag(tag)
             tag_id = data_manager.get_tag_id(tag)
 
-        data_manager.add_question_tag(question_id, dict(tag_id)["id"])
+        data_manager.add_question_tag(question_id, tag_id.get("id"))
         return redirect(
             url_for(
                 "display_question_by_id",
@@ -372,7 +376,7 @@ def register():
             msg = "Please fill out the form!"
         elif user_credentials:
             msg = "Account already exists!"
-        elif re.match(r"^[A-Za-z\d]$", username):
+        elif re.match(r"^[^A-Za-z\d]+$", username):
             msg = "Username must contain only characters and numbers!"
         else:
             password = hash_pass.hash_password(password)
@@ -393,7 +397,7 @@ def login():
         and "password" in request.form
         and hash_pass.verify_password(
             request.form["password"],
-            dict(data_manager.select_user(request.form["username"]))["password"],
+            data_manager.select_user(request.form["username"]).get("password"),
         )
     ):
         user_credentials = data_manager.select_user(request.form["username"])
