@@ -126,8 +126,7 @@ def delete_answer(cursor, id, user_id):
             DELETE FROM answer WHERE id = %(id)s;
             DELETE FROM answer WHERE user_id = %(user_id)s AND id = %(id)s;
         """,
-        {"id": id,
-         "user_id": user_id},
+        {"id": id, "user_id": user_id},
     )
 
 
@@ -145,13 +144,14 @@ def edit_question(cursor, id, title, message):
 
 @database_common.connection_handler
 def view_number(cursor, id):
-    cursor.execute("""
+    cursor.execute(
+        """
                 UPDATE question 
                 SET view_number = view_number +1 
                 WHERE id=%(id)s
                 """,
-                {"id": id}
-                   )
+        {"id": id},
+    )
 
 
 @database_common.connection_handler
@@ -364,9 +364,8 @@ def get_latest_questions(cursor):
 @database_common.connection_handler
 def select_user(cursor, username):
     cursor.execute(
-        "SELECT * FROM user_registration "
-        "WHERE username = %(username)s;",
-        {"username": username}
+        "SELECT * FROM user_registration " "WHERE username = %(username)s;",
+        {"username": username},
     )
     return cursor.fetchone()
 
@@ -376,7 +375,7 @@ def insert_user_credentials(cursor, username, email, password):
     cursor.execute(
         "INSERT INTO user_registration (submission_time, username, email, password)"
         "VALUES (now()::timestamp(0), %(username)s, %(email)s, %(password)s);",
-        {'username': username, 'email': email, 'password': password}
+        {"username": username, "email": email, "password": password},
     )
 
 
@@ -403,60 +402,63 @@ def get_user_details_without_id(cursor):
 
 @database_common.connection_handler
 def get_user_details_with_id(cursor, user_id):
-    cursor.execute("SELECT user_registration.user_id, "
-                   "username,"
-                   "reputation, "
-                   "user_registration.submission_time, "
-                   "COUNT(DISTINCT question.id) as number_of_questions, "
-                   "COUNT(DISTINCT answer.id) as number_of_answers, "
-                   "COUNT(DISTINCT comment.id) as number_of_comments "
-                   "FROM user_registration "
-                   "LEFT JOIN question "
-                   "ON user_registration.user_id = question.user_id "
-                   "LEFT JOIN answer "
-                   "ON user_registration.user_id = answer.user_id "
-                   "LEFT JOIN comment "
-                   "ON user_registration.user_id = comment.user_id "
-                   "WHERE user_registration.user_id = %(user_id)s "
-                   "GROUP BY user_registration.username, user_registration.submission_time, user_registration.user_id,"
-                   "user_registration.reputation;",
-                   {'user_id': user_id}
-                   )
+    cursor.execute(
+        "SELECT user_registration.user_id, "
+        "username,"
+        "reputation, "
+        "user_registration.submission_time, "
+        "COUNT(DISTINCT question.id) as number_of_questions, "
+        "COUNT(DISTINCT answer.id) as number_of_answers, "
+        "COUNT(DISTINCT comment.id) as number_of_comments "
+        "FROM user_registration "
+        "LEFT JOIN question "
+        "ON user_registration.user_id = question.user_id "
+        "LEFT JOIN answer "
+        "ON user_registration.user_id = answer.user_id "
+        "LEFT JOIN comment "
+        "ON user_registration.user_id = comment.user_id "
+        "WHERE user_registration.user_id = %(user_id)s "
+        "GROUP BY user_registration.username, user_registration.submission_time, user_registration.user_id,"
+        "user_registration.reputation;",
+        {"user_id": user_id},
+    )
     return cursor.fetchone()
 
 
 @database_common.connection_handler
 def get_questions_by_user_id(cursor, user_id):
-    cursor.execute("SELECT * FROM question "
-                   "WHERE  user_id = %(user_id)s ",
-                    {'user_id': user_id})
+    cursor.execute(
+        "SELECT * FROM question " "WHERE  user_id = %(user_id)s ", {"user_id": user_id}
+    )
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_answers_by_user_id(cursor, user_id):
-    cursor.execute("SELECT * FROM answer "
-                   "WHERE  user_id = %(user_id)s ",
-                    {'user_id': user_id})
+    cursor.execute(
+        "SELECT * FROM answer " "WHERE  user_id = %(user_id)s ", {"user_id": user_id}
+    )
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_comments_by_user_id(cursor, user_id):
-    cursor.execute("SELECT * FROM comment "
-                   "WHERE  user_id = %(user_id)s ;",
-                    {'user_id': user_id})
+    cursor.execute(
+        "SELECT * FROM comment " "WHERE  user_id = %(user_id)s ;", {"user_id": user_id}
+    )
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_tags(cursor):
-    cursor.execute("SELECT tag.name AS Tags, "
-                   "COUNT(question_tag.question_id) as Number_of_questions "
-                   "FROM tag "
-                   "INNER JOIN question_tag "
-                   "ON tag.id=question_tag.tag_id "
-                   "GROUP BY tag.name;")
+    cursor.execute(
+        "SELECT tag.name AS Tags, "
+        "COUNT(question_tag.question_id) as Number_of_questions "
+        "FROM tag "
+        "INNER JOIN question_tag "
+        "ON tag.id=question_tag.tag_id "
+        "GROUP BY tag.name;"
+    )
     return cursor.fetchall()
 
 
@@ -470,27 +472,29 @@ def get_data_for_search_answer_and_question(cursor):
 
 @database_common.connection_handler
 def accept_answer(cursor, answer_id):
-    cursor.execute("UPDATE answer "
-                   "SET acceptance = 'yes' "
-                   "WHERE acceptance IS NULL AND id=%(answer_id)s;",
-                   {'answer_id': answer_id}
-                   )
+    cursor.execute(
+        "UPDATE answer "
+        "SET acceptance = 'yes' "
+        "WHERE acceptance IS NULL AND id=%(answer_id)s;",
+        {"answer_id": answer_id},
+    )
 
 
 @database_common.connection_handler
 def cancel_other_accepted_answer(cursor, question_id):
-    cursor.execute("UPDATE answer "
-                   "SET acceptance = NULL "
-                   "WHERE acceptance = 'yes' AND question_id=%(question_id)s;",
-                   {'question_id': question_id}
-                   )
+    cursor.execute(
+        "UPDATE answer "
+        "SET acceptance = NULL "
+        "WHERE acceptance = 'yes' AND question_id=%(question_id)s;",
+        {"question_id": question_id},
+    )
 
 
 @database_common.connection_handler
 def modify_reputation(cursor, modifier, user_id):
-    cursor.execute("UPDATE user_registration "
-                   "SET reputation = reputation + %(modifier)s "
-                   "WHERE user_id = %(user_id)s;",
-                   {'modifier': modifier,
-                    'user_id': user_id}
-                   )
+    cursor.execute(
+        "UPDATE user_registration "
+        "SET reputation = reputation + %(modifier)s "
+        "WHERE user_id = %(user_id)s;",
+        {"modifier": modifier, "user_id": user_id},
+    )
