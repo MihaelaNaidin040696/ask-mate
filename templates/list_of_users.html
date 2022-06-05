@@ -20,7 +20,7 @@
             <tr>
                 <td>
                     <a
-                    href="{{ url_for('user_page', user_id=session['id']) }}"
+                    href="{{ url_for('user_page', user_id=user.user_id) }}"
                     >{{ user.username }}</a
                     >
                 </td>

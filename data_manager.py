@@ -383,7 +383,7 @@ def insert_user_credentials(cursor, username, email, password):
 @database_common.connection_handler
 def get_user_details_without_id(cursor):
     cursor.execute(
-        "SELECT DISTINCT username,"
+        "SELECT DISTINCT user_registration.user_id, username,"
         "reputation, "
         "user_registration.submission_time, "
         "COUNT(DISTINCT question.id) as number_of_questions, "
@@ -396,7 +396,10 @@ def get_user_details_without_id(cursor):
         "ON user_registration.user_id = answer.user_id "
         "LEFT JOIN comment "
         "ON user_registration.user_id = comment.user_id "
-        "GROUP BY user_registration.username, user_registration.submission_time, user_registration.reputation;"
+        "GROUP BY user_registration.username, "
+        "user_registration.submission_time, "
+        "user_registration.user_id, "
+        "user_registration.reputation;"
     )
     return cursor.fetchall()
 
