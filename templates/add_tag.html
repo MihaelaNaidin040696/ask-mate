@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}TAGS{% endblock title %}
+
+{% block content %}
+<h2>Question tags</h2>
+<form
+    method="post"
+    action="{{ url_for('add_question_tag', question_id=question_id)}}"
+>
+    <select
+        class="form-select form-select-lg mb-3"
+        aria-label=".form-select-lg example"
+        name="name"
+    >
+        <option value="">Choose a tag</option>
+        {% for tag in tags %}
+            <option value="{{ tag.name }}">{{ tag.name }}</option>
+        {% endfor %}
+    </select>
+    <br />
+    <p>Or add your own tag</p>
+    <input type="text" name="tag" /><br />
+    <br />
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
